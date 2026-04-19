@@ -1,0 +1,10 @@
+CREATE TABLE medecin (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    specialite VARCHAR(150),
+    numero_ordre VARCHAR(100) NOT NULL UNIQUE,
+    telephone VARCHAR(30),
+    email VARCHAR(120),
+    actif BOOLEAN NOT NULL DEFAULT TRUE
+);
