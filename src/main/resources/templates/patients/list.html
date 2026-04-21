@@ -8,9 +8,25 @@
 <body>
 
 <div class="container mt-5">
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">Liste des patients</h1>
-        <a href="/patients/add" class="btn btn-primary">+ Ajouter un patient</a>
+        <a th:href="@{/patients/add}" class="btn btn-primary">+ Ajouter un patient</a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form th:action="@{/patients}" method="get" class="row g-3">
+                <div class="col-md-10">
+                    <input type="text" name="keyword" class="form-control"
+                           placeholder="Rechercher par nom, CIN ou téléphone"
+                           th:value="${keyword}">
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-outline-primary">Rechercher</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="card shadow-sm">
@@ -25,7 +41,7 @@
                         <th>Date de naissance</th>
                         <th>Téléphone</th>
                         <th>Email</th>
-                        <th style="width: 180px;">Actions</th>
+                        <th style="width: 260px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,12 +54,17 @@
                         <td th:text="${patient.telephone}"></td>
                         <td th:text="${patient.email}"></td>
                         <td>
+                            <a th:href="@{/patients/{id}(id=${patient.id})}" class="btn btn-info btn-sm me-2">
+                                Détails
+                            </a>
+
                             <a th:href="@{/patients/edit/{id}(id=${patient.id})}" class="btn btn-warning btn-sm me-2">
                                 Modifier
                             </a>
-                            <a th:href="@{/patients/delete/{id}(id=${patient.id})}" class="btn btn-danger btn-sm">
-                                Supprimer
-                            </a>
+
+                            <form th:action="@{/patients/delete/{id}(id=${patient.id})}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
 
@@ -54,6 +75,7 @@
             </table>
         </div>
     </div>
+
 </div>
 
 </body>

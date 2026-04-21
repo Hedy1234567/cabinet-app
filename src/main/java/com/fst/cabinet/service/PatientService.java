@@ -18,9 +18,22 @@ public class PatientService {
     }
 
     public Patient savePatient(Patient patient) {
+
+        if (patient.getCin() == null || patient.getCin().isBlank()) {
+            throw new RuntimeException("CIN obligatoire");
+        }
+
+        if (patient.getNom() == null || patient.getNom().isBlank()) {
+            throw new RuntimeException("Nom obligatoire");
+        }
+
+        if (patient.getPrenom() == null || patient.getPrenom().isBlank()) {
+            throw new RuntimeException("Prénom obligatoire");
+        }
+
         patientRepository.findByCin(patient.getCin()).ifPresent(existingPatient -> {
             if (patient.getId() == null || !existingPatient.getId().equals(patient.getId())) {
-                throw new RuntimeException("CIN already exists");
+                throw new RuntimeException("CIN déjà existant");
             }
         });
 
@@ -28,7 +41,7 @@ public class PatientService {
             patient.setDateCreation(LocalDateTime.now());
         } else {
             Patient existingPatient = patientRepository.findById(patient.getId())
-                    .orElseThrow(() -> new RuntimeException("Patient not found"));
+                    .orElseThrow(() -> new RuntimeException("Patient introuvable"));
             patient.setDateCreation(existingPatient.getDateCreation());
         }
 
@@ -39,12 +52,22 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
+    public List<Patient> searchPatients(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return patientRepository.findAll();
+        }
+
+        return patientRepository
+                .findByNomContainingIgnoreCaseOrCinContainingIgnoreCaseOrTelephoneContainingIgnoreCase(
+                        keyword, keyword, keyword);
+    }
+
     public void deletePatient(Long id) {
         patientRepository.deleteById(id);
     }
 
     public Patient getPatientById(Long id) {
         return patientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Patient not found"));
+                .orElseThrow(() -> new RuntimeException("Patient introuvable"));
     }
 }

@@ -25,8 +25,16 @@ public class PatientController {
     }
 
     @GetMapping("/patients")
-    public String listPatients(Model model) {
-        model.addAttribute("patients", patientService.getAllPatients());
+    public String listPatients(Model model, String keyword) {
+
+        if (keyword != null && !keyword.isBlank()) {
+            model.addAttribute("patients", patientService.searchPatients(keyword));
+        } else {
+            model.addAttribute("patients", patientService.getAllPatients());
+        }
+
+        model.addAttribute("keyword", keyword);
+
         return "patients/list";
     }
 
@@ -52,15 +60,21 @@ public class PatientController {
         }
     }
 
-    @GetMapping("/patients/delete/{id}")
+    @GetMapping("/patients/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        model.addAttribute("patient", patientService.getPatientById(id));
+        return "patients/edit";
+    }
+
+    @PostMapping("/patients/delete/{id}")
     public String deletePatient(@PathVariable Long id) {
         patientService.deletePatient(id);
         return "redirect:/patients";
     }
 
-    @GetMapping("/patients/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
+    @GetMapping("/patients/{id}")
+    public String patientDetails(@PathVariable Long id, Model model) {
         model.addAttribute("patient", patientService.getPatientById(id));
-        return "patients/edit";
+        return "patients/details";
     }
 }
