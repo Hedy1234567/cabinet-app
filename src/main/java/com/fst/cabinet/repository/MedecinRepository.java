@@ -8,7 +8,9 @@ import com.fst.cabinet.entity.Medecin;
 
 public interface MedecinRepository extends JpaRepository<Medecin, Long> {
 
+    Optional<Medecin> findByNumeroOrdre(String numeroOrdre);
+
     boolean existsByNumeroOrdre(String numeroOrdre);
 
-    Optional<Medecin> findByNumeroOrdre(String numeroOrdre);
+    boolean existsByNumeroOrdreAndIdNot(String numeroOrdre, Long id);
 }
