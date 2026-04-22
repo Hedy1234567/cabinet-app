@@ -6,63 +6,81 @@
 </head>
 <body class="bg-light">
 
-<div class="container mt-5">
+<div th:replace="fragments/navbar :: navbar"></div>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Liste des Médecins</h2>
-        <a th:href="@{/medecins/add}" class="btn btn-success">Ajouter Médecin</a>
-    </div>
+<div class="container-fluid mt-5">
+    <div class="row">
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-
-            <table class="table table-bordered table-hover align-middle">
-                <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Spécialité</th>
-                    <th>Numéro d'ordre</th>
-                    <th>Téléphone</th>
-                    <th>Email</th>
-                    <th>Actif</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr th:each="m : ${medecins}">
-                    <td th:text="${m.id}"></td>
-                    <td th:text="${m.nom}"></td>
-                    <td th:text="${m.prenom}"></td>
-                    <td th:text="${m.specialite}"></td>
-                    <td th:text="${m.numeroOrdre}"></td>
-                    <td th:text="${m.telephone}"></td>
-                    <td th:text="${m.email}"></td>
-                    <td>
-                        <span th:if="${m.actif}" class="badge bg-success">Oui</span>
-                        <span th:unless="${m.actif}" class="badge bg-secondary">Non</span>
-                    </td>
-                    <td>
-                        <a th:href="@{/medecins/edit/{id}(id=${m.id})}" class="btn btn-primary btn-sm">Edit</a>
-
-                        <form th:action="@{/medecins/delete/{id}(id=${m.id})}" method="post" class="d-inline">
-                            <button class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-
-                <tr th:if="${#lists.isEmpty(medecins)}">
-                    <td colspan="9" class="text-center text-muted">Aucun médecin disponible</td>
-                </tr>
-                </tbody>
-            </table>
-
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 mb-4">
+            <div th:replace="fragments/sidebar :: sidebar"></div>
         </div>
-    </div>
 
+        <!-- Content -->
+        <div class="col-md-9 col-lg-10">
+            <div class="container">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Liste des Médecins</h2>
+                    <a th:href="@{/medecins/add}" class="btn btn-success">Ajouter Médecin</a>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Spécialité</th>
+                                    <th>Numéro d'ordre</th>
+                                    <th>Téléphone</th>
+                                    <th>Email</th>
+                                    <th>Actif</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr th:each="m : ${medecins}">
+                                    <td th:text="${m.id}"></td>
+                                    <td th:text="${m.nom}"></td>
+                                    <td th:text="${m.prenom}"></td>
+                                    <td th:text="${m.specialite}"></td>
+                                    <td th:text="${m.numeroOrdre}"></td>
+                                    <td th:text="${m.telephone}"></td>
+                                    <td th:text="${m.email}"></td>
+                                    <td>
+                                        <span th:if="${m.actif}" class="badge bg-success">Oui</span>
+                                        <span th:unless="${m.actif}" class="badge bg-secondary">Non</span>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/medecins/edit/{id}(id=${m.id})}" class="btn btn-primary btn-sm">Edit</a>
+
+                                        <form th:action="@{/medecins/delete/{id}(id=${m.id})}" method="post" class="d-inline">
+                                            <button class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                                <tr th:if="${#lists.isEmpty(medecins)}">
+                                    <td colspan="9" class="text-center text-muted">Aucun médecin disponible</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
 </div>
+
+<div th:replace="fragments/footer :: footer"></div>
 
 </body>
 </html>
