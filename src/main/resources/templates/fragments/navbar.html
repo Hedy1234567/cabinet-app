@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}">Cabinet Médical</a>
+        <a class="navbar-brand fw-bold text-primary" th:href="@{/}">
+             Cabinet
+        </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>

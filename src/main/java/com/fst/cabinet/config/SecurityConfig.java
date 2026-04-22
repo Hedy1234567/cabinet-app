@@ -25,6 +25,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
+                .loginPage("/login") // 👈 الإضافة الوحيدة
                 .defaultSuccessUrl("/home", true)
                 .permitAll()
             )

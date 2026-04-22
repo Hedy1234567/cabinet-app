@@ -77,4 +77,8 @@ public class PatientController {
         model.addAttribute("patient", patientService.getPatientById(id));
         return "patients/details";
     }
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+}
 }
