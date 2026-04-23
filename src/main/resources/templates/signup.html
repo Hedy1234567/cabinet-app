@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription - Cabinet Médical</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d6efd, #6ea8fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .signup-card {
+            width: 500px;
+            padding: 30px;
+            border-radius: 18px;
+            background: white;
+        }
+
+        .title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+        }
+
+        .btn {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="signup-card shadow-lg">
+
+    <div class="title">
+        🏥 Inscription Patient / Utilisateur
+    </div>
+
+    <form th:action="@{/signup}" method="post">
+
+        <!-- NAME -->
+        <div class="mb-2">
+            <label class="form-label">Nom</label>
+            <input type="text" name="nom" class="form-control" required>
+        </div>
+
+        <!-- FAMILY NAME -->
+        <div class="mb-2">
+            <label class="form-label">Prénom</label>
+            <input type="text" name="prenom" class="form-control" required>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="mb-2">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+
+        <!-- DATE OF BIRTH -->
+        <div class="mb-2">
+            <label class="form-label">Date de naissance</label>
+            <input type="date" name="dateNaissance" class="form-control" required>
+        </div>
+
+        <!-- LOCATION -->
+        <div class="mb-2">
+            <label class="form-label">Adresse</label>
+            <input type="text" name="adresse" class="form-control" placeholder="Ville / Rue / Code postal">
+        </div>
+
+        <!-- PHONE -->
+        <div class="mb-2">
+            <label class="form-label">Téléphone</label>
+            <input type="text" name="telephone" class="form-control">
+        </div>
+
+        <hr>
+
+        <!-- USERNAME -->
+        <div class="mb-2">
+            <label class="form-label">Nom d'utilisateur</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="mb-2">
+            <label class="form-label">Mot de passe</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <!-- CONFIRM PASSWORD -->
+        <div class="mb-3">
+            <label class="form-label">Confirmer mot de passe</label>
+            <input type="password" name="confirmPassword" class="form-control" required>
+        </div>
+
+        <!-- BUTTON -->
+        <button type="submit" class="btn btn-primary w-100">
+            S'inscrire
+        </button>
+
+    </form>
+
+    <!-- BACK -->
+    <a href="/welcome" class="btn btn-outline-secondary w-100 mt-2">
+        ⬅ Retour à l'accueil
+    </a>
+
+</div>
+
+</body>
+</html>
