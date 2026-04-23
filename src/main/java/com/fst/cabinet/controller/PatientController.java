@@ -20,11 +20,6 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "redirect:/patients";
-    }
-
     @GetMapping("/patients")
     public String listPatients(Model model) {
         model.addAttribute("patients", patientService.getAllPatients());
@@ -35,7 +30,6 @@ public class PatientController {
     @GetMapping("/patients/add")
     public String showAddForm(Model model) {
         model.addAttribute("patient", new Patient());
-        model.addAttribute("activePage", "patients");
         return "patients/add";
     }
 
@@ -48,10 +42,7 @@ public class PatientController {
             model.addAttribute("patient", patient);
             model.addAttribute("errorMessage", e.getMessage());
 
-            if (patient.getId() != null) {
-                return "patients/edit";
-            }
-            return "patients/add";
+            return (patient.getId() != null) ? "patients/edit" : "patients/add";
         }
     }
 
@@ -64,25 +55,21 @@ public class PatientController {
     @GetMapping("/patients/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         model.addAttribute("patient", patientService.getPatientById(id));
-        model.addAttribute("activePage", "patients");
         return "patients/edit";
     }
 
     @GetMapping("/patients/search")
-public String searchPatients(@RequestParam("keyword") String keyword, Model model) {
-
-    model.addAttribute("patients", patientService.searchPatients(keyword));
-    model.addAttribute("keyword", keyword);
-    model.addAttribute("activePage", "patients");
-    return "patients/list";
-}
+    public String searchPatients(@RequestParam("keyword") String keyword, Model model) {
+        model.addAttribute("patients", patientService.searchPatients(keyword));
+        model.addAttribute("keyword", keyword);
+        return "patients/list";
+    }
 
     @GetMapping("/patients/{id}")
-public String patientFiche(@PathVariable Long id, Model model) {
-    model.addAttribute("patient", patientService.getPatientById(id));
-    model.addAttribute("activePage", "patients");
-    return "patients/fiche";
-}
+    public String patientFiche(@PathVariable Long id, Model model) {
+        model.addAttribute("patient", patientService.getPatientById(id));
+        return "patients/fiche";
+    }
 }
 
 

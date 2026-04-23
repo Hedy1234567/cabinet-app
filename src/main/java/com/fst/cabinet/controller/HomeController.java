@@ -14,4 +14,11 @@ public class HomeController {
 
         return "home";
     }
+
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/welcome";
+    }
+
+
 }
