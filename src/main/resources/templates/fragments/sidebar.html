@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      <head>
     <meta charset="UTF-8">
     <title>Page</title>
 
@@ -136,6 +138,10 @@
 }
 </style>
 
+<body>
+
+<div th:fragment="sidebar">
+
 <div class="sidebar">
 
     <!-- PROFILE -->
@@ -148,57 +154,60 @@
 
     <hr>
 
-    <span th:if="${activePage == 'home'}"
-      class="sidebar-item active">
-    <span class="icon">🏠</span>
-    <span class="label">Home</span>
-</span>
+    <!-- HOME -->
+    <span th:if="${activePage == 'home'}" class="sidebar-item active">
+        <span class="icon">🏠</span>
+        <span class="label">Home</span>
+    </span>
 
-<a th:if="${activePage != 'home'}"
-   href="/home"
-   class="sidebar-item">
-    <span class="icon">🏠</span>
-    <span class="label">Home</span>
-</a>
+    <a th:if="${activePage != 'home'}"
+       href="/home"
+       class="sidebar-item">
+        <span class="icon">🏠</span>
+        <span class="label">Home</span>
+    </a>
 
+    <!-- PATIENTS (ALL ROLES) -->
+    <span th:if="${activePage == 'patients'}" class="sidebar-item active">
+        <span class="icon">👤</span>
+        <span class="label">Patients</span>
+    </span>
 
-     <span th:if="${activePage == 'patients'}"
-      class="sidebar-item active">
-    <span class="icon">👤</span>
-    <span class="label">Patients</span>
-</span>
+    <a th:if="${activePage != 'patients'}"
+       href="/patients"
+       class="sidebar-item">
+        <span class="icon">👤</span>
+        <span class="label">Patients</span>
+    </a>
 
-<a th:if="${activePage != 'patients'}"
-   href="/patients"
-   class="sidebar-item">
-    <span class="icon">👤</span>
-    <span class="label">Patients</span>
-</a>
+    <!-- MEDECINS (ONLY ADMIN + SECRETAIRE) -->
+    <div sec:authorize="hasAnyRole('ADMIN','SECRETAIRE')">
 
+        <span th:if="${activePage == 'medecins'}" class="sidebar-item active">
+            <span class="icon">👨‍⚕️</span>
+            <span class="label">Médecins</span>
+        </span>
 
-    <span th:if="${activePage == 'medecins'}"
-      class="sidebar-item active">
-    <span class="icon">👨‍⚕️</span>
-    <span class="label">Médecins</span>
-</span>
+        <a th:if="${activePage != 'medecins'}"
+           href="/medecins"
+           class="sidebar-item">
+            <span class="icon">👨‍⚕️</span>
+            <span class="label">Médecins</span>
+        </a>
 
-<a th:if="${activePage != 'medecins'}"
-   href="/medecins"
-   class="sidebar-item">
-    <span class="icon">👨‍⚕️</span>
-    <span class="label">Médecins</span>
-</a>
+    </div>
 
+    <!-- LOGOUT -->
     <form th:action="@{/logout}" method="post" style="margin:0;">
-    <input type="hidden"
-           th:name="${_csrf.parameterName}"
-           th:value="${_csrf.token}" />
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}" />
 
-    <button type="submit" class="sidebar-item">
-        <span class="icon">🚪</span>
-        <span class="label">Logout</span>
-    </button>
-</form>
+        <button type="submit" class="sidebar-item">
+            <span class="icon">🚪</span>
+            <span class="label">Logout</span>
+        </button>
+    </form>
 
 </div>
 
