@@ -1,27 +1,18 @@
 package com.fst.cabinet.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import static org.mockito.ArgumentMatchers.any;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import com.fst.cabinet.entity.Medecin;
 import com.fst.cabinet.repository.MedecinRepository;
 
-@ExtendWith(MockitoExtension.class)
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 class MedecinServiceTest {
 
     @Mock
@@ -30,105 +21,63 @@ class MedecinServiceTest {
     @InjectMocks
     private MedecinService medecinService;
 
-    private Medecin medecin;
+    public MedecinServiceTest() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-    @BeforeEach
-    void setUp() {
-        medecin = new Medecin();
-        medecin.setId(1L);
-        medecin.setNom("Ben Ali");
-        medecin.setPrenom("Sami");
-        medecin.setSpecialite("Cardiologie");
+    @Test
+    void testSaveMedecin_success() {
+        Medecin medecin = new Medecin();
         medecin.setNumeroOrdre("ORD123");
-        medecin.setTelephone("55443322");
-        medecin.setEmail("medecin@test.com");
-        medecin.setActif(true);
+
+        when(medecinRepository.findByNumeroOrdre("ORD123"))
+                .thenReturn(Optional.empty());
+
+        when(medecinRepository.save(any(Medecin.class)))
+                .thenReturn(medecin);
+
+        Medecin result = medecinService.saveMedecin(medecin);
+
+        assertNotNull(result);
+        verify(medecinRepository, times(1)).save(medecin);
     }
 
     @Test
-    void shouldSaveMedecinSuccessfully() {
-        medecin.setId(null);
-
-        when(medecinRepository.existsByNumeroOrdre("ORD123")).thenReturn(false);
-        when(medecinRepository.save(any(Medecin.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        Medecin savedMedecin = medecinService.save(medecin);
-
-        assertNotNull(savedMedecin);
-        assertEquals("ORD123", savedMedecin.getNumeroOrdre());
-        verify(medecinRepository).save(any(Medecin.class));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenNumeroOrdreAlreadyExists() {
-        medecin.setId(null);
-
-        when(medecinRepository.existsByNumeroOrdre("ORD123")).thenReturn(true);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            medecinService.save(medecin);
-        });
-
-        assertEquals("Numéro d'ordre déjà existant", exception.getMessage());
-        verify(medecinRepository, never()).save(any(Medecin.class));
-    }
-
-    @Test
-    void shouldUpdateMedecinSuccessfully() {
+    void testSaveMedecin_duplicateNumeroOrdre_shouldThrow() {
         Medecin existing = new Medecin();
         existing.setId(1L);
-        existing.setNom("Old");
-        existing.setPrenom("Old");
-        existing.setSpecialite("Old");
         existing.setNumeroOrdre("ORD123");
-        existing.setTelephone("11111111");
-        existing.setEmail("old@test.com");
-        existing.setActif(false);
 
-        when(medecinRepository.findById(1L)).thenReturn(Optional.of(existing));
-        when(medecinRepository.existsByNumeroOrdreAndIdNot("ORD123", 1L)).thenReturn(false);
-        when(medecinRepository.save(any(Medecin.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Medecin newMedecin = new Medecin();
+        newMedecin.setNumeroOrdre("ORD123");
 
-        Medecin updated = medecinService.update(1L, medecin);
-
-        assertEquals("Ben Ali", updated.getNom());
-        assertEquals("Sami", updated.getPrenom());
-        assertEquals("Cardiologie", updated.getSpecialite());
-        assertEquals("ORD123", updated.getNumeroOrdre());
-        assertTrue(updated.isActif());
-        verify(medecinRepository).save(any(Medecin.class));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenUpdatingWithDuplicateNumeroOrdre() {
-        when(medecinRepository.findById(1L)).thenReturn(Optional.of(new Medecin()));
-        when(medecinRepository.existsByNumeroOrdreAndIdNot("ORD123", 1L)).thenReturn(true);
+        when(medecinRepository.findByNumeroOrdre("ORD123"))
+                .thenReturn(Optional.of(existing));
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            medecinService.update(1L, medecin);
+            medecinService.saveMedecin(newMedecin);
         });
 
-        assertEquals("Numéro d'ordre déjà existant", exception.getMessage());
+        assertEquals("Numero ordre already exists", exception.getMessage());
     }
 
     @Test
-    void shouldReturnAllMedecins() {
-        when(medecinRepository.findAll()).thenReturn(List.of(medecin));
+    void testDeleteMedecin_success() {
+        when(medecinRepository.existsById(1L)).thenReturn(true);
 
-        List<Medecin> result = medecinService.getAll();
+        medecinService.deleteMedecin(1L);
 
-        assertEquals(1, result.size());
-        verify(medecinRepository).findAll();
+        verify(medecinRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    void shouldThrowExceptionWhenMedecinNotFound() {
-        when(medecinRepository.findById(99L)).thenReturn(Optional.empty());
+    void testDeleteMedecin_notFound_shouldThrow() {
+        when(medecinRepository.existsById(1L)).thenReturn(false);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            medecinService.getById(99L);
+            medecinService.deleteMedecin(1L);
         });
 
-        assertEquals("Médecin not found", exception.getMessage());
+        assertEquals("Medecin not found", exception.getMessage());
     }
 }

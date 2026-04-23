@@ -22,10 +22,11 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/medecin/**").hasRole("MEDECIN")
                 .requestMatchers("/secretaire/**").hasRole("SECRETAIRE")
+                .requestMatchers("/medecins/**").hasAnyRole("ADMIN", "SECRETAIRE")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login") // 👈 الإضافة الوحيدة
+                .loginPage("/login")
                 .defaultSuccessUrl("/home", true)
                 .permitAll()
             )

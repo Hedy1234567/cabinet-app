@@ -70,4 +70,17 @@ public class PatientService {
         return patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient introuvable"));
     }
+
+    public List<Patient> searchPatients(String keyword) {
+    return patientRepository
+        .findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrCinContainingIgnoreCaseOrTelephoneContainingIgnoreCase(
+            keyword,
+            keyword,
+            keyword,
+            keyword
+        );
+}
+
+
+
 }
