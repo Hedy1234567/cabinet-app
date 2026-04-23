@@ -20,11 +20,6 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "redirect:/patients";
-    }
-
     @GetMapping("/patients")
     public String listPatients(Model model) {
         model.addAttribute("patients", patientService.getAllPatients());
@@ -69,21 +64,17 @@ public class PatientController {
     }
 
     @GetMapping("/patients/search")
-public String searchPatients(@RequestParam("keyword") String keyword, Model model) {
-
-    model.addAttribute("patients", patientService.searchPatients(keyword));
-    model.addAttribute("keyword", keyword);
-    model.addAttribute("activePage", "patients");
-    return "patients/list";
-}
+    public String searchPatients(@RequestParam("keyword") String keyword, Model model) {
+        model.addAttribute("patients", patientService.searchPatients(keyword));
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("activePage", "patients");
+        return "patients/list";
+    }
 
     @GetMapping("/patients/{id}")
-public String patientFiche(@PathVariable Long id, Model model) {
-    model.addAttribute("patient", patientService.getPatientById(id));
-    model.addAttribute("activePage", "patients");
-    return "patients/fiche";
+    public String patientFiche(@PathVariable Long id, Model model) {
+        model.addAttribute("patient", patientService.getPatientById(id));
+        model.addAttribute("activePage", "patients");
+        return "patients/fiche";
+    }
 }
-}
-
-
-

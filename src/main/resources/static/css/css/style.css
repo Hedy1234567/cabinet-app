@@ -76,26 +76,235 @@ body {
 .navbar {
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
+
 /* 🔐 Login Page */
 body.login-page {
     background: linear-gradient(135deg, #0d6efd, #3b82f6);
 }
 
-/* 🧊 Glass effect */
 .login-card {
     backdrop-filter: blur(10px);
     background: rgba(255,255,255,0.9);
     border-radius: 15px;
 }
-.home-content h1 {
-    font-size: 2.5rem;
+
+/* ===== HERO RIGHT IMAGE ===== */
+.welcome-hero {
+    background: linear-gradient(135deg, #f8fbff 0%, #eef5ff 100%);
+    min-height: 100vh;
+    overflow: hidden;
 }
 
-.home-content .card {
-    border-radius: 15px;
-    transition: 0.3s;
+.hero-content-wrapper {
+    position: relative;
+    z-index: 2;
 }
 
-.home-content .card:hover {
-    transform: scale(1.05);
+.hero-title {
+    color: #1f2937;
+}
+
+.hero-text {
+    color: #64748b;
+}
+
+.hero-text-width {
+    max-width: 760px;
+}
+
+.hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-image-right {
+    width: 100%;
+    max-width: 470px;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 24px;
+    box-shadow: 0 24px 50px rgba(0,0,0,0.14);
+    transition: transform 0.3s ease;
+}
+
+.hero-image-right:hover {
+    transform: scale(1.02);
+}
+
+.floating-card {
+    position: absolute;
+    background: rgba(255,255,255,0.96);
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+    padding: 10px 16px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.floating-card-1 {
+    top: 18px;
+    left: -10px;
+}
+
+.floating-card-2 {
+    bottom: 18px;
+    right: -10px;
+}
+
+.hero-stats .mini-stat {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+.hero-stats .mini-stat:hover {
+    transform: translateY(-4px);
+}
+
+/* ===== Sections ===== */
+.section-label {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #e7f1ff;
+    color: #0d6efd;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.section-text {
+    max-width: 700px;
+}
+
+.feature-card,
+.service-card,
+.contact-card,
+.cta-box {
+    background: #fff;
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    padding: 28px;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover,
+.service-card:hover,
+.contact-card:hover,
+.cta-box:hover {
+    transform: translateY(-4px);
+}
+
+.icon-box,
+.service-icon,
+.contact-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.service-icon,
+.contact-icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+}
+
+/* Images */
+.about-image {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 24px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    display: block;
+}
+
+.service-card {
+    overflow: hidden;
+    height: 100%;
+}
+
+.service-img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 16px;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.contact-image {
+    width: 100%;
+    height: 320px !important;
+    object-fit: cover !important;
+    object-position: center;
+    border-radius: 24px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    display: block;
+}
+
+/* Animations */
+.fade-up {
+    animation: fadeUp 0.8s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .welcome-hero {
+        min-height: auto;
+        padding: 100px 0 70px;
+    }
+
+    .hero-title {
+        font-size: 2.4rem;
+    }
+
+    .hero-image-right {
+        max-width: 100%;
+        height: 240px;
+        margin-top: 20px;
+    }
+
+    .floating-card {
+        display: none;
+    }
+
+    .about-image {
+        height: 300px;
+    }
+
+    .contact-image {
+        height: 260px !important;
+    }
+
+    .service-img {
+        height: 190px;
+    }
+    #contact img {
+    display: none !important;
+}
 }
