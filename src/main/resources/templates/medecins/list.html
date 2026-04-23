@@ -2,10 +2,9 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Patients - Cabinet Médical</title>
+    <title>Médecins - Cabinet Médical</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
 
     <style>
@@ -49,19 +48,14 @@
         }
 
         .table {
-            overflow: hidden;
             border-radius: 12px;
-        }
-
-        .action-btns a {
-            margin-right: 5px;
+            overflow: hidden;
         }
     </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="content">
 <div class="container py-4">
@@ -70,12 +64,12 @@
     <div class="top-bar d-flex justify-content-between align-items-center mb-4 shadow-sm">
 
         <div>
-            <h2 class="page-title mb-0">👤 Gestion des Patients</h2>
-            <small class="text-muted">Liste complète des patients du cabinet</small>
+            <h2 class="page-title mb-0">👨‍⚕️ Gestion des Médecins</h2>
+            <small class="text-muted">Liste des médecins du cabinet</small>
         </div>
 
-        <a href="/patients/add" class="btn btn-primary">
-            + Ajouter un patient
+        <a href="/medecins/add" class="btn btn-primary">
+            + Ajouter un médecin
         </a>
 
     </div>
@@ -95,11 +89,11 @@
             </div>
 
             <div class="col-md-3">
-                <input id="searchCin" class="form-control" placeholder="CIN">
+                <input id="searchSpec" class="form-control" placeholder="Spécialité">
             </div>
 
             <div class="col-md-3">
-                <input id="searchTel" class="form-control" placeholder="Téléphone">
+                <input id="searchNum" class="form-control" placeholder="Numéro ordre">
             </div>
 
         </div>
@@ -111,56 +105,65 @@
     <div class="card shadow-sm">
         <div class="card-body p-0">
 
-            <table class="table table-hover mb-0 align-middle">
+            <table class="table table-hover align-middle mb-0">
 
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>CIN</th>
                         <th>Nom</th>
                         <th>Prénom</th>
-                        <th>Date de naissance</th>
-                        <th>Téléphone</th>
+                        <th>Spécialité</th>
+                        <th>Numéro ordre</th>
                         <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Actif</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
 
-                    <tr th:each="patient : ${patients}">
-                        <td th:text="${patient.id}"></td>
-                        <td th:text="${patient.cin}"></td>
-                        <td th:text="${patient.nom}"></td>
-                        <td th:text="${patient.prenom}"></td>
-                        <td th:text="${patient.dateNaissance}"></td>
-                        <td th:text="${patient.telephone}"></td>
-                        <td th:text="${patient.email}"></td>
+                    <tr th:each="m : ${medecins}">
 
-                        <td class="action-btns">
+                        <td th:text="${m.id}"></td>
+                        <td th:text="${m.nom}"></td>
+                        <td th:text="${m.prenom}"></td>
+                        <td th:text="${m.specialite}"></td>
+                        <td th:text="${m.numeroOrdre}"></td>
+                        <td th:text="${m.email}"></td>
+                        <td th:text="${m.telephone}"></td>
 
-                            <a th:href="@{/patients/{id}(id=${patient.id})}"
+                        <td>
+                            <span th:text="${m.actif} ? 'Oui' : 'Non'"
+                                  th:classappend="${m.actif} ? 'text-success' : 'text-danger'">
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <a th:href="@{/medecins/{id}(id=${m.id})}"
                                class="btn btn-info btn-sm">
                                 Voir
                             </a>
 
-                            <a th:href="@{/patients/edit/{id}(id=${patient.id})}"
+                            <a th:href="@{/medecins/edit/{id}(id=${m.id})}"
                                class="btn btn-warning btn-sm">
                                 Modifier
                             </a>
 
-                            <a th:href="@{/patients/delete/{id}(id=${patient.id})}"
+                            <a th:href="@{/medecins/delete/{id}(id=${m.id})}"
                                class="btn btn-danger btn-sm"
-                               onclick="return confirm('Supprimer ce patient ?')">
+                               onclick="return confirm('Supprimer ce médecin ?')">
                                 Supprimer
                             </a>
 
                         </td>
+
                     </tr>
 
-                    <tr th:if="${#lists.isEmpty(patients)}">
-                        <td colspan="8" class="text-center text-muted p-4">
-                            Aucun patient disponible
+                    <tr th:if="${#lists.isEmpty(medecins)}">
+                        <td colspan="9" class="text-center text-muted p-4">
+                            Aucun médecin disponible
                         </td>
                     </tr>
 
@@ -175,35 +178,35 @@
 </div>
 
 <script>
-function filterPatients() {
+function filterTable() {
 
     let nom = document.getElementById("searchNom").value.toLowerCase();
     let prenom = document.getElementById("searchPrenom").value.toLowerCase();
-    let cin = document.getElementById("searchCin").value.toLowerCase();
-    let tel = document.getElementById("searchTel").value.toLowerCase();
+    let spec = document.getElementById("searchSpec").value.toLowerCase();
+    let num = document.getElementById("searchNum").value.toLowerCase();
 
     let rows = document.querySelectorAll("tbody tr");
 
     rows.forEach(row => {
 
-        let cNom = row.cells[2].innerText.toLowerCase();
-        let cPrenom = row.cells[3].innerText.toLowerCase();
-        let cCin = row.cells[1].innerText.toLowerCase();
-        let cTel = row.cells[5].innerText.toLowerCase();
+        let cNom = row.cells[1].innerText.toLowerCase();
+        let cPrenom = row.cells[2].innerText.toLowerCase();
+        let cSpec = row.cells[3].innerText.toLowerCase();
+        let cNum = row.cells[4].innerText.toLowerCase();
 
         let match =
             cNom.includes(nom) &&
             cPrenom.includes(prenom) &&
-            cCin.includes(cin) &&
-            cTel.includes(tel);
+            cSpec.includes(spec) &&
+            cNum.includes(num);
 
         row.style.display = match ? "" : "none";
     });
 }
 
 // attach events
-["searchNom","searchPrenom","searchCin","searchTel"].forEach(id => {
-    document.getElementById(id).addEventListener("keyup", filterPatients);
+["searchNom","searchPrenom","searchSpec","searchNum"].forEach(id => {
+    document.getElementById(id).addEventListener("keyup", filterTable);
 });
 </script>
 

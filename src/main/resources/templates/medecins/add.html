@@ -2,11 +2,9 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Ajouter un patient</title>
+    <title>Page</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
-
 
     <style>
         .content {
@@ -16,9 +14,7 @@
         }
     </style>
 
-
-
-
+    
     <style>
         body {
             background: #f4f6f9;
@@ -33,7 +29,7 @@
             border-radius: 15px 15px 0 0;
         }
 
-        .form-control {
+        .form-control, .form-select {
             border-radius: 10px;
         }
 
@@ -54,23 +50,15 @@
 
                 <!-- HEADER -->
                 <div class="card-header bg-primary text-white p-4">
-                    <h3 class="mb-0">👤 Ajouter un patient</h3>
-                    <small>Remplissez les informations du patient</small>
+                    <h3 class="mb-0">👨‍⚕️ Gestion Médecin</h3>
+                    <small>Ajouter ou modifier un médecin</small>
                 </div>
 
                 <div class="card-body p-4">
 
-                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-
-                    <form th:action="@{/patients/save}" th:object="${patient}" method="post">
+                    <form th:action="@{/medecins/save}" th:object="${medecin}" method="post">
 
                         <div class="row g-3">
-
-                            <!-- CIN -->
-                            <div class="col-md-6">
-                                <label class="form-label">CIN</label>
-                                <input type="text" th:field="*{cin}" class="form-control" placeholder="Ex: 12345678">
-                            </div>
 
                             <!-- NOM -->
                             <div class="col-md-6">
@@ -84,16 +72,16 @@
                                 <input type="text" th:field="*{prenom}" class="form-control" placeholder="Prénom">
                             </div>
 
-                            <!-- DATE -->
+                            <!-- SPECIALITE -->
                             <div class="col-md-6">
-                                <label class="form-label">Date de naissance</label>
-                                <input type="date" th:field="*{dateNaissance}" class="form-control">
+                                <label class="form-label">Spécialité</label>
+                                <input type="text" th:field="*{specialite}" class="form-control" placeholder="Cardiologue, Généraliste...">
                             </div>
 
-                            <!-- TELEPHONE -->
+                            <!-- NUMERO ORDRE -->
                             <div class="col-md-6">
-                                <label class="form-label">Téléphone</label>
-                                <input type="text" th:field="*{telephone}" class="form-control" placeholder="+216 ...">
+                                <label class="form-label">Numéro d'ordre</label>
+                                <input type="text" th:field="*{numeroOrdre}" class="form-control" placeholder="Ex: ORD12345">
                             </div>
 
                             <!-- EMAIL -->
@@ -102,11 +90,19 @@
                                 <input type="email" th:field="*{email}" class="form-control" placeholder="email@example.com">
                             </div>
 
-                            <!-- ANTECEDENTS -->
-                            <div class="col-12">
-                                <label class="form-label">Antécédents médicaux</label>
-                                <textarea th:field="*{antecedents}" class="form-control" rows="4"
-                                          placeholder="Allergies, maladies, traitements..."></textarea>
+                            <!-- TELEPHONE -->
+                            <div class="col-md-6">
+                                <label class="form-label">Téléphone</label>
+                                <input type="text" th:field="*{telephone}" class="form-control" placeholder="+216 ...">
+                            </div>
+
+                            <!-- ACTIF -->
+                            <div class="col-md-6">
+                                <label class="form-label">Statut</label>
+                                <select th:field="*{actif}" class="form-select">
+                                    <option value="true">Actif</option>
+                                    <option value="false">Inactif</option>
+                                </select>
                             </div>
 
                         </div>
@@ -114,12 +110,12 @@
                         <!-- BUTTONS -->
                         <div class="d-flex justify-content-between mt-4">
 
-                            <a href="/patients" class="btn btn-outline-secondary px-4">
+                            <a href="/medecins" class="btn btn-outline-secondary px-4">
                                 Retour
                             </a>
 
                             <button type="submit" class="btn btn-success px-4">
-                                Ajouter patient
+                                Sauvegarder
                             </button>
 
                         </div>
