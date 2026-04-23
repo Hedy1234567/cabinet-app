@@ -2,34 +2,62 @@ package com.fst.cabinet.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.fst.cabinet.service.CustomUserDetailsService;
 
 @Configuration
 public class SecurityConfig {
 
+    private final CustomUserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomSuccessHandler customSuccessHandler;
+
+    public SecurityConfig(CustomUserDetailsService userDetailsService,
+                          PasswordEncoder passwordEncoder,
+                          CustomSuccessHandler customSuccessHandler) {
+        this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
+        this.customSuccessHandler = customSuccessHandler;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/signup", "/css/**", "/images/**").permitAll()
+
+                // PUBLIC PAGES
+                .requestMatchers("/", "/welcome", "/login", "/signup").permitAll()
+
+                // ADMIN
                 .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                // MEDECIN
                 .requestMatchers("/medecin/**").hasRole("MEDECIN")
+
+                // SECRETAIRE
                 .requestMatchers("/secretaire/**").hasRole("SECRETAIRE")
-                .requestMatchers("/medecins/**").hasAnyRole("ADMIN", "SECRETAIRE")
+
+                // PATIENT
+                .requestMatchers("/patient/**").hasRole("PATIENT")
+
+                // everything else requires login
                 .anyRequest().authenticated()
             )
+
+            // LOGIN CONFIG
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/home", true)
+                .successHandler(customSuccessHandler) // 🔥 IMPORTANT FIX
                 .permitAll()
             )
+
+            // LOGOUT CONFIG
             .logout(logout -> logout
                 .logoutSuccessUrl("/login")
                 .permitAll()
@@ -38,32 +66,14 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // USERS
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin123"))
-                .roles("ADMIN")
-                .build();
+    public AuthenticationProvider authenticationProvider() {
 
-        UserDetails medecin = User.builder()
-                .username("medecin")
-                .password(passwordEncoder().encode("med123"))
-                .roles("MEDECIN")
-                .build();
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
-        UserDetails secretaire = User.builder()
-                .username("secretaire")
-                .password(passwordEncoder().encode("sec123"))
-                .roles("SECRETAIRE")
-                .build();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
 
-        return new InMemoryUserDetailsManager(admin, medecin, secretaire);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return provider;
     }
 }
