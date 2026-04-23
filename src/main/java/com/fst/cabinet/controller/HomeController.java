@@ -12,7 +12,7 @@ public class HomeController {
 
         model.addAttribute("activePage", "home");
 
-        return "home";
+        return "admin/dashboard";
     }
 
     @GetMapping("/")
