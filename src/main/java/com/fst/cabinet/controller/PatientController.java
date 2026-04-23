@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fst.cabinet.entity.Patient;
 import com.fst.cabinet.service.PatientService;
@@ -27,12 +28,14 @@ public class PatientController {
     @GetMapping("/patients")
     public String listPatients(Model model) {
         model.addAttribute("patients", patientService.getAllPatients());
+        model.addAttribute("activePage", "patients");
         return "patients/list";
     }
 
     @GetMapping("/patients/add")
     public String showAddForm(Model model) {
         model.addAttribute("patient", new Patient());
+        model.addAttribute("activePage", "patients");
         return "patients/add";
     }
 
@@ -61,6 +64,26 @@ public class PatientController {
     @GetMapping("/patients/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         model.addAttribute("patient", patientService.getPatientById(id));
+        model.addAttribute("activePage", "patients");
         return "patients/edit";
     }
+
+    @GetMapping("/patients/search")
+public String searchPatients(@RequestParam("keyword") String keyword, Model model) {
+
+    model.addAttribute("patients", patientService.searchPatients(keyword));
+    model.addAttribute("keyword", keyword);
+    model.addAttribute("activePage", "patients");
+    return "patients/list";
 }
+
+    @GetMapping("/patients/{id}")
+public String patientFiche(@PathVariable Long id, Model model) {
+    model.addAttribute("patient", patientService.getPatientById(id));
+    model.addAttribute("activePage", "patients");
+    return "patients/fiche";
+}
+}
+
+
+

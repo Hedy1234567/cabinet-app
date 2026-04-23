@@ -2,17 +2,12 @@ package com.fst.cabinet.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.fst.cabinet.entity.Medecin;
 import com.fst.cabinet.service.MedecinService;
 
 @Controller
-@RequestMapping("/medecins")
 public class MedecinController {
 
     private final MedecinService medecinService;
@@ -21,39 +16,57 @@ public class MedecinController {
         this.medecinService = medecinService;
     }
 
-    @GetMapping
+    // LIST
+    @GetMapping("/medecins")
     public String list(Model model) {
-        model.addAttribute("medecins", medecinService.getAll());
+        model.addAttribute("medecins", medecinService.getAllMedecins());
+        model.addAttribute("activePage", "medecins");
         return "medecins/list";
     }
 
-    @GetMapping("/add")
+    // SHOW ADD FORM
+    @GetMapping("/medecins/add")
     public String addForm(Model model) {
         model.addAttribute("medecin", new Medecin());
+        model.addAttribute("activePage", "medecins");
         return "medecins/add";
     }
 
-    @PostMapping("/save")
+    // SAVE (CREATE + UPDATE)
+    @PostMapping("/medecins/save")
     public String save(@ModelAttribute Medecin medecin) {
-        medecinService.save(medecin);
+        medecinService.saveMedecin(medecin);
         return "redirect:/medecins";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model) {
+    // EDIT
+    @GetMapping("/medecins/edit/{id}")
+    public String edit(@PathVariable Long id, Model model) {
         model.addAttribute("medecin", medecinService.getById(id));
-        return "medecins/edit";
+        model.addAttribute("activePage", "medecins");
+        return "medecins/add";
     }
 
-    @PostMapping("/update/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute Medecin medecin) {
-        medecinService.update(id, medecin);
+    // DELETE
+    @GetMapping("/medecins/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        medecinService.deleteMedecin(id);
         return "redirect:/medecins";
+    }
+
+    @GetMapping("/medecins/search")
+    public String searchMedecins(@RequestParam("keyword") String keyword, Model model) {
+
+        model.addAttribute("medecins", medecinService.searchMedecins(keyword));
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("activePage", "medecins");
+        return "medecins/list";
 }
 
-    @PostMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-        medecinService.delete(id);
-        return "redirect:/medecins";
-    }
+    @GetMapping("/medecins/{id}")
+    public String fiche(@PathVariable Long id, Model model) {
+        model.addAttribute("medecin", medecinService.getById(id));
+        model.addAttribute("activePage", "medecins");
+        return "medecins/fiche";
+}
 }

@@ -4,61 +4,135 @@
     <meta charset="UTF-8">
     <title>Ajouter un patient</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+
+    <style>
+        .content {
+            margin-left: 80px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+    </style>
+
+
+
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+
+        .card-header {
+            border-radius: 15px 15px 0 0;
+        }
+
+        .form-control {
+            border-radius: 10px;
+        }
+
+        .btn {
+            border-radius: 10px;
+        }
+    </style>
 </head>
+
 <body>
+<div class="content">
+<div class="container py-5">
 
-<div class="container mt-5">
-    <div class="card shadow-sm col-md-8 mx-auto">
-        <div class="card-header bg-primary text-white">
-            <h3 class="mb-0">Ajouter un patient</h3>
-        </div>
-        <div class="card-body">
-            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-            <form th:action="@{/patients/save}" th:object="${patient}" method="post">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
 
-                <div class="mb-3">
-                    <label class="form-label">CIN</label>
-                    <input type="text" th:field="*{cin}" class="form-control" placeholder="Entrer le CIN">
+            <div class="card shadow-lg">
+
+                <!-- HEADER -->
+                <div class="card-header bg-primary text-white p-4">
+                    <h3 class="mb-0">👤 Ajouter un patient</h3>
+                    <small>Remplissez les informations du patient</small>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Nom</label>
-                    <input type="text" th:field="*{nom}" class="form-control" placeholder="Entrer le nom">
-                </div>
+                <div class="card-body p-4">
 
-                <div class="mb-3">
-                    <label class="form-label">Prénom</label>
-                    <input type="text" th:field="*{prenom}" class="form-control" placeholder="Entrer le prénom">
-                </div>
+                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
-                <div class="mb-3">
-                    <label class="form-label">Date de naissance</label>
-                    <input type="date" th:field="*{dateNaissance}" class="form-control">
-                </div>
+                    <form th:action="@{/patients/save}" th:object="${patient}" method="post">
 
-                <div class="mb-3">
-                    <label class="form-label">Téléphone</label>
-                    <input type="text" th:field="*{telephone}" class="form-control" placeholder="Entrer le téléphone">
-                </div>
+                        <div class="row g-3">
 
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" th:field="*{email}" class="form-control" placeholder="Entrer l'email">
-                </div>
+                            <!-- CIN -->
+                            <div class="col-md-6">
+                                <label class="form-label">CIN</label>
+                                <input type="text" th:field="*{cin}" class="form-control" placeholder="Ex: 12345678">
+                            </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Antécédents</label>
-                    <textarea th:field="*{antecedents}" class="form-control" rows="4" placeholder="Entrer les antécédents"></textarea>
-                </div>
+                            <!-- NOM -->
+                            <div class="col-md-6">
+                                <label class="form-label">Nom</label>
+                                <input type="text" th:field="*{nom}" class="form-control" placeholder="Nom">
+                            </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="/patients" class="btn btn-secondary">Retour</a>
-                    <button type="submit" class="btn btn-success">Ajouter</button>
+                            <!-- PRENOM -->
+                            <div class="col-md-6">
+                                <label class="form-label">Prénom</label>
+                                <input type="text" th:field="*{prenom}" class="form-control" placeholder="Prénom">
+                            </div>
+
+                            <!-- DATE -->
+                            <div class="col-md-6">
+                                <label class="form-label">Date de naissance</label>
+                                <input type="date" th:field="*{dateNaissance}" class="form-control">
+                            </div>
+
+                            <!-- TELEPHONE -->
+                            <div class="col-md-6">
+                                <label class="form-label">Téléphone</label>
+                                <input type="text" th:field="*{telephone}" class="form-control" placeholder="+216 ...">
+                            </div>
+
+                            <!-- EMAIL -->
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" th:field="*{email}" class="form-control" placeholder="email@example.com">
+                            </div>
+
+                            <!-- ANTECEDENTS -->
+                            <div class="col-12">
+                                <label class="form-label">Antécédents médicaux</label>
+                                <textarea th:field="*{antecedents}" class="form-control" rows="4"
+                                          placeholder="Allergies, maladies, traitements..."></textarea>
+                            </div>
+
+                        </div>
+
+                        <!-- BUTTONS -->
+                        <div class="d-flex justify-content-between mt-4">
+
+                            <a href="/patients" class="btn btn-outline-secondary px-4">
+                                Retour
+                            </a>
+
+                            <button type="submit" class="btn btn-success px-4">
+                                Ajouter patient
+                            </button>
+
+                        </div>
+
+                    </form>
+
                 </div>
-            </form>
+            </div>
+
         </div>
     </div>
-</div>
 
+</div>
+</div>
 </body>
 </html>

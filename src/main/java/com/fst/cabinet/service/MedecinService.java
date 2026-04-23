@@ -16,65 +16,47 @@ public class MedecinService {
         this.medecinRepository = medecinRepository;
     }
 
-    public List<Medecin> getAll() {
-        return medecinRepository.findAll();
-    }
+    // CREATE + UPDATE
+    public Medecin saveMedecin(Medecin medecin) {
 
-    public Medecin getById(Long id) {
-        return medecinRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Médecin not found"));
-    }
-
-    public Medecin save(Medecin medecin) {
-        validateMedecin(medecin);
-
-        if (medecinRepository.existsByNumeroOrdre(medecin.getNumeroOrdre())) {
-            throw new RuntimeException("Numéro d'ordre déjà existant");
-        }
-
-        if (medecin.getId() == null) {
-            medecin.setActif(medecin.isActif());
-        }
+        // check unique numeroOrdre
+        medecinRepository.findByNumeroOrdre(medecin.getNumeroOrdre())
+                .ifPresent(existing -> {
+                    if (medecin.getId() == null ||
+                        !existing.getId().equals(medecin.getId())) {
+                        throw new RuntimeException("Numero ordre already exists");
+                    }
+                });
 
         return medecinRepository.save(medecin);
     }
 
-    public Medecin update(Long id, Medecin medecin) {
-        Medecin existing = getById(id);
-
-        validateMedecin(medecin);
-
-        if (medecinRepository.existsByNumeroOrdreAndIdNot(medecin.getNumeroOrdre(), id)) {
-            throw new RuntimeException("Numéro d'ordre déjà existant");
-        }
-
-        existing.setNom(medecin.getNom());
-        existing.setPrenom(medecin.getPrenom());
-        existing.setSpecialite(medecin.getSpecialite());
-        existing.setNumeroOrdre(medecin.getNumeroOrdre());
-        existing.setTelephone(medecin.getTelephone());
-        existing.setEmail(medecin.getEmail());
-        existing.setActif(medecin.isActif());
-
-        return medecinRepository.save(existing);
+    // GET ALL
+    public List<Medecin> getAllMedecins() {
+        return medecinRepository.findAll();
     }
 
-    public void delete(Long id) {
+    // GET BY ID
+    public Medecin getById(Long id) {
+        return medecinRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Medecin not found"));
+    }
+
+    // DELETE
+    public void deleteMedecin(Long id) {
+        if (!medecinRepository.existsById(id)) {
+            throw new RuntimeException("Medecin not found");
+        }
         medecinRepository.deleteById(id);
     }
 
-    private void validateMedecin(Medecin medecin) {
-        if (medecin.getNom() == null || medecin.getNom().isBlank()) {
-            throw new RuntimeException("Nom obligatoire");
-        }
-        if (medecin.getPrenom() == null || medecin.getPrenom().isBlank()) {
-            throw new RuntimeException("Prénom obligatoire");
-        }
-        if (medecin.getSpecialite() == null || medecin.getSpecialite().isBlank()) {
-            throw new RuntimeException("Spécialité obligatoire");
-        }
-        if (medecin.getNumeroOrdre() == null || medecin.getNumeroOrdre().isBlank()) {
-            throw new RuntimeException("Numéro d'ordre obligatoire");
-        }
-    }
+    public List<Medecin> searchMedecins(String keyword) {
+    return medecinRepository
+        .findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrSpecialiteContainingIgnoreCaseOrNumeroOrdreContainingIgnoreCase(
+            keyword,
+            keyword,
+            keyword,
+            keyword
+        );
+}
 }
