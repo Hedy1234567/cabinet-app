@@ -40,5 +40,48 @@ public class DataInitializer implements CommandLineRunner {
 
             System.out.println("ADMIN CREATED: admin / admin123");
         }
-    }
+
+        // 🔥 CHECK IF SECRETAIRE EXISTS
+boolean secExists = userRepository.findByUsername("secretaire").isPresent();
+
+if (!secExists) {
+
+    AppUser sec = new AppUser();
+    sec.setUsername("secretaire");
+    sec.setPassword(passwordEncoder.encode("sec123"));
+    sec.setEmail("sec@cabinet.com");
+    sec.setNom("Secretaire");
+    sec.setPrenom("Default");
+    sec.setRole(Role.SECRETAIRE);
+
+    userRepository.save(sec);
+
+    System.out.println("SECRETAIRE CREATED: secretaire / sec123");
+}
+
+// 🔥 CHECK IF MEDECIN EXISTS
+boolean medecinExists = userRepository.findByUsername("medecin").isPresent();
+
+if (!medecinExists) {
+
+    AppUser medecin = new AppUser();
+    medecin.setUsername("medecin");
+    medecin.setPassword(passwordEncoder.encode("med123"));
+    medecin.setEmail("medecin@cabinet.com");
+    medecin.setNom("Doctor");
+    medecin.setPrenom("Test");
+    medecin.setRole(Role.MEDECIN);
+
+    userRepository.save(medecin);
+
+    System.out.println("MEDECIN CREATED: medecin / med123");
+}
+
+
+
+}
+
+
+
+
 }

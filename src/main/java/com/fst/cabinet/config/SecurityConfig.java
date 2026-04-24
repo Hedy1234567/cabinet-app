@@ -2,6 +2,7 @@ package com.fst.cabinet.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.fst.cabinet.service.CustomUserDetailsService;
 
 @Configuration
+@PreAuthorize("hasAnyRole('ADMIN','SECRETAIRE','MEDECIN')")
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
@@ -34,17 +36,16 @@ public class SecurityConfig {
                 // PUBLIC PAGES
                 .requestMatchers("/", "/welcome", "/login", "/signup").permitAll()
 
-                // ADMIN
+                // PATIENTS (ALL ROLES EXCEPT PATIENT USER)
+                .requestMatchers("/patients/**")
+                    .hasAnyRole("ADMIN", "SECRETAIRE", "MEDECIN")
+
+                // MEDECINS (NO MEDECIN ACCESS HERE)
+                .requestMatchers("/medecins/**")
+                    .hasAnyRole("ADMIN", "SECRETAIRE")
+
+                // ADMIN ONLY
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                // MEDECIN
-                .requestMatchers("/medecin/**").hasRole("MEDECIN")
-
-                // SECRETAIRE
-                .requestMatchers("/secretaire/**").hasRole("SECRETAIRE")
-
-                // PATIENT
-                .requestMatchers("/patient/**").hasRole("PATIENT")
 
                 // everything else requires login
                 .anyRequest().authenticated()
@@ -53,7 +54,7 @@ public class SecurityConfig {
             // LOGIN CONFIG
             .formLogin(form -> form
                 .loginPage("/login")
-                .successHandler(customSuccessHandler) // 🔥 IMPORTANT FIX
+                .successHandler(customSuccessHandler)
                 .permitAll()
             )
 
@@ -61,6 +62,11 @@ public class SecurityConfig {
             .logout(logout -> logout
                 .logoutSuccessUrl("/login")
                 .permitAll()
+            )
+
+            // OPTIONAL (clean 403 page)
+            .exceptionHandling(ex -> ex
+                .accessDeniedPage("/access-denied")
             );
 
         return http.build();
@@ -76,4 +82,5 @@ public class SecurityConfig {
 
         return provider;
     }
+    
 }

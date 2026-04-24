@@ -68,9 +68,11 @@
             <small class="text-muted">Liste des médecins du cabinet</small>
         </div>
 
-        <a href="/medecins/add" class="btn btn-primary">
-            + Ajouter un médecin
-        </a>
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+   href="/medecins/add"
+   class="btn btn-primary">
+    + Ajouter un médecin
+</a>
 
     </div>
 
@@ -141,21 +143,21 @@
 
                         <td>
 
-                            <a th:href="@{/medecins/{id}(id=${m.id})}"
-                               class="btn btn-info btn-sm">
-                                Voir
-                            </a>
+                            <a th:href="@{/medecins/{id}(id=${m.id})}" class="btn btn-info btn-sm">
+    Voir
+</a>
 
-                            <a th:href="@{/medecins/edit/{id}(id=${m.id})}"
-                               class="btn btn-warning btn-sm">
-                                Modifier
-                            </a>
+<a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+   th:href="@{/medecins/edit/{id}(id=${m.id})}"
+   class="btn btn-warning btn-sm">
+    Modifier
+</a>
 
-                            <a th:href="@{/medecins/delete/{id}(id=${m.id})}"
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('Supprimer ce médecin ?')">
-                                Supprimer
-                            </a>
+<a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+   th:href="@{/medecins/delete/{id}(id=${m.id})}"
+   class="btn btn-danger btn-sm">
+    Supprimer
+</a>
 
                         </td>
 

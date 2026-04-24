@@ -69,4 +69,7 @@ public class MedecinController {
         model.addAttribute("activePage", "medecins");
         return "medecins/fiche";
 }
+
+
+    
 }

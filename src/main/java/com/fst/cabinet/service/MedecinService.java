@@ -16,10 +16,9 @@ public class MedecinService {
         this.medecinRepository = medecinRepository;
     }
 
-    // CREATE + UPDATE
+    // CREATE / UPDATE
     public Medecin saveMedecin(Medecin medecin) {
 
-        // check unique numeroOrdre
         medecinRepository.findByNumeroOrdre(medecin.getNumeroOrdre())
                 .ifPresent(existing -> {
                     if (medecin.getId() == null ||
@@ -50,13 +49,11 @@ public class MedecinService {
         medecinRepository.deleteById(id);
     }
 
+    // SEARCH
     public List<Medecin> searchMedecins(String keyword) {
-    return medecinRepository
-        .findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrSpecialiteContainingIgnoreCaseOrNumeroOrdreContainingIgnoreCase(
-            keyword,
-            keyword,
-            keyword,
-            keyword
-        );
-}
+        return medecinRepository
+            .findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrSpecialiteContainingIgnoreCaseOrNumeroOrdreContainingIgnoreCase(
+                keyword, keyword, keyword, keyword
+            );
+    }
 }
