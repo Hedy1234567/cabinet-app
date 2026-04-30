@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier Rendez-vous</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .content {
+            margin-left: 80px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        body {
+            background: #f4f6f9;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: white;
+            padding: 20px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .form-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="fragments/sidebar :: sidebar"></div>
+
+<div class="content">
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow-lg">
+
+                <!-- HEADER -->
+                <div class="header">
+                    <h3 class="mb-0">✏️ Modifier Rendez-vous</h3>
+                    <small>Mettre à jour les informations</small>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form th:action="@{/appointments/edit/{id}(id=${appointment.id})}"
+                          method="post">
+
+                        <!-- DATE -->
+                        <div class="form-box">
+                            <label>Date</label>
+                            <input type="datetime-local"
+                                   name="dateHeure"
+                                   class="form-control"
+                                   th:value="${appointment.dateHeure}">
+                        </div>
+
+                        <!-- DURATION -->
+                        <div class="form-box">
+                            <label>Durée (minutes)</label>
+                            <input type="number"
+                                   name="dureeMinutes"
+                                   class="form-control"
+                                   th:value="${appointment.dureeMinutes}">
+                        </div>
+
+                        <!-- STATUS -->
+                        <div class="form-box">
+                            <label>Statut</label>
+                            <select name="statut" class="form-control">
+                                <option>PLANIFIE</option>
+                                <option>CONFIRME</option>
+                                <option>ANNULE</option>
+                                <option>TERMINE</option>
+                            </select>
+                        </div>
+
+                        <!-- MOTIF -->
+                        <div class="form-box">
+                            <label>Motif</label>
+                            <input type="text"
+                                   name="motif"
+                                   class="form-control"
+                                   th:value="${appointment.motif}">
+                        </div>
+
+                        <input type="hidden" name="id" th:value="${appointment.id}" />
+
+                        <!-- BUTTONS -->
+                        <div class="mt-4 d-flex justify-content-between">
+
+                            <a href="/appointments"
+                               class="btn btn-outline-secondary">
+                                ⬅ Retour
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-success">
+                                💾 Enregistrer
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

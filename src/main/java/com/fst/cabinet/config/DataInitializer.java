@@ -23,8 +23,10 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        // ✅ ADMIN
-        if (userRepository.findByUsername("admin").isEmpty()) {
+        // 🔥 CHECK IF ADMIN EXISTS
+        boolean adminExists = userRepository.findByUsername("admin").isPresent();
+
+        if (!adminExists) {
 
             AppUser admin = new AppUser();
             admin.setUsername("admin");
@@ -39,22 +41,25 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("ADMIN CREATED: admin / admin123");
         }
 
-        // ✅ SECRETAIRE
-        if (userRepository.findByUsername("secretaire").isEmpty()) {
+        // 🔥 CHECK IF SECRETAIRE EXISTS
+boolean secExists = userRepository.findByUsername("secretaire").isPresent();
 
-            AppUser sec = new AppUser();
-            sec.setUsername("secretaire");
-            sec.setPassword(passwordEncoder.encode("sec123"));
-            sec.setEmail("sec@cabinet.com");
-            sec.setNom("Secretaire");
-            sec.setPrenom("Cabinet");
-            sec.setRole(Role.SECRETAIRE);
+if (!secExists) {
 
-            userRepository.save(sec);
+    AppUser sec = new AppUser();
+    sec.setUsername("secretaire");
+    sec.setPassword(passwordEncoder.encode("sec123"));
+    sec.setEmail("sec@cabinet.com");
+    sec.setNom("Secretaire");
+    sec.setPrenom("Default");
+    sec.setRole(Role.SECRETAIRE);
 
-            System.out.println("SECRETAIRE CREATED: secretaire / sec123");
-        }
-        // 🔥 CHECK IF MEDECIN EXISTS
+    userRepository.save(sec);
+
+    System.out.println("SECRETAIRE CREATED: secretaire / sec123");
+}
+
+// 🔥 CHECK IF MEDECIN EXISTS
 boolean medecinExists = userRepository.findByUsername("medecin").isPresent();
 
 if (!medecinExists) {
@@ -71,5 +76,12 @@ if (!medecinExists) {
 
     System.out.println("MEDECIN CREATED: medecin / med123");
 }
-    }
+
+
+
+}
+
+
+
+
 }

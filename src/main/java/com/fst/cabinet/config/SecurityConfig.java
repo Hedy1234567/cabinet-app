@@ -2,6 +2,7 @@ package com.fst.cabinet.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.fst.cabinet.service.CustomUserDetailsService;
 
 @Configuration
+@PreAuthorize("hasAnyRole('ADMIN','SECRETAIRE','MEDECIN')")
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
@@ -80,4 +82,5 @@ public class SecurityConfig {
 
         return provider;
     }
+    
 }

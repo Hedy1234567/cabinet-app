@@ -8,12 +8,14 @@ import com.fst.cabinet.entity.Patient;
 
 import java.util.List;
 
+
+
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     boolean existsByCin(String cin);
-
+    Optional<Patient> findByEmail(String email);
     Optional<Patient> findByCin(String cin);
-
+    Optional<Patient> findByAppUser_Username(String username);
     List<Patient> findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrCinContainingIgnoreCaseOrTelephoneContainingIgnoreCase(
         String nom,
         String prenom,

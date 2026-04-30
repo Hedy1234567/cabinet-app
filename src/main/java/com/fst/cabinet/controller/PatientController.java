@@ -2,79 +2,56 @@ package com.fst.cabinet.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 import com.fst.cabinet.entity.Patient;
+import com.fst.cabinet.entity.RendezVous;
+import com.fst.cabinet.service.MedecinService;
 import com.fst.cabinet.service.PatientService;
 
 @Controller
 public class PatientController {
 
     private final PatientService patientService;
+    private final MedecinService medecinService;
 
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService,
+                             MedecinService medecinService) {
         this.patientService = patientService;
+        this.medecinService = medecinService;
     }
 
+    // ================= LIST =================
     @GetMapping("/patients")
     public String listPatients(Model model) {
         model.addAttribute("patients", patientService.getAllPatients());
-        model.addAttribute("activePage", "patients");
         return "patients/list";
     }
 
+    // ================= ADD PATIENT (ADMIN) =================
     @GetMapping("/patients/add")
     public String showAddForm(Model model) {
         model.addAttribute("patient", new Patient());
-        model.addAttribute("activePage", "patients");
         return "patients/add";
     }
 
+    // ================= SAVE PATIENT =================
     @PostMapping("/patients/save")
-    public String savePatient(@ModelAttribute Patient patient, Model model) {
-        try {
-            patientService.savePatient(patient);
-            return "redirect:/patients";
-        } catch (RuntimeException e) {
-            model.addAttribute("patient", patient);
-            model.addAttribute("errorMessage", e.getMessage());
-
-            if (patient.getId() != null) {
-                return "patients/edit";
-            }
-            return "patients/add";
-        }
-    }
-
-    @GetMapping("/patients/delete/{id}")
-    public String deletePatient(@PathVariable Long id) {
-        patientService.deletePatient(id);
+    public String savePatient(@ModelAttribute Patient patient) {
+        patientService.savePatient(patient);
         return "redirect:/patients";
     }
 
-    @GetMapping("/patients/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        model.addAttribute("patient", patientService.getPatientById(id));
-        model.addAttribute("activePage", "patients");
-        return "patients/edit";
-    }
 
-    @GetMapping("/patients/search")
-    public String searchPatients(@RequestParam("keyword") String keyword, Model model) {
-        model.addAttribute("patients", patientService.searchPatients(keyword));
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("activePage", "patients");
-        return "patients/list";
-    }
 
-    @GetMapping("/patients/{id}")
-    public String patientFiche(@PathVariable Long id, Model model) {
-        model.addAttribute("patient", patientService.getPatientById(id));
-        model.addAttribute("activePage", "patients");
-        return "patients/fiche";
-    }
+    // ================= PATIENT ADD APPOINTMENT PAGE =================
+    @GetMapping("/patient/add")
+public String showAddAppointmentPage(Model model) {
+
+    model.addAttribute("appointment", new RendezVous());
+    model.addAttribute("medecins", medecinService.getAllMedecins());
+
+    return "patient/add";
+}
 }

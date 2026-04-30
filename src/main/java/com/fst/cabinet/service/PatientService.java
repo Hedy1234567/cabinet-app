@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.core.Authentication;
 import com.fst.cabinet.entity.Patient;
 import com.fst.cabinet.repository.PatientRepository;
 
@@ -12,7 +12,7 @@ import com.fst.cabinet.repository.PatientRepository;
 public class PatientService {
 
     private final PatientRepository patientRepository;
-
+    
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
@@ -57,7 +57,19 @@ public class PatientService {
             keyword
         );
 }
+    public Patient findByEmail(String email) {
+    return patientRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Patient not found"));
+}
 
+    public Patient findByAppUserUsername(String username) {
+    return patientRepository.findByAppUser_Username(username)
+            .orElseThrow(() -> new RuntimeException("Patient not found"));
+}
 
+    public Patient getCurrentPatient(Authentication auth) {
+    return patientRepository.findByAppUser_Username(auth.getName())
+           .orElseThrow();
+}
 
 }
