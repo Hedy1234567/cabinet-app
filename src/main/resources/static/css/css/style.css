@@ -307,4 +307,88 @@ body.login-page {
     #contact img {
     display: none !important;
 }
+:root {
+    --primary: #0d6efd;
+    --secondary: #4dabf7;
+    --bg: #f5f8ff;
+    --card-radius: 20px;
+}
+
+body {
+    background: var(--bg);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.card-pro {
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    background: white;
+}
+
+.btn-pro {
+    border-radius: 14px;
+    height: 48px;
+}
+/* BACKGROUND */
+.login-bg {
+    background: #f5f7fb;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* CENTER WRAPPER */
+.login-wrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* BACK LINK */
+.back-link {
+    position: absolute;
+    top: 25px;
+    left: 40px;
+    text-decoration: none;
+    color: #444;
+    font-weight: 500;
+}
+
+/* CARD */
+.login-card {
+    width: 360px; /* 🔥 هذا اللي يخليها صغيرة كيف الصورة */
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+/* ICON */
+.login-icon {
+    width: 55px;
+    height: 55px;
+    background: #2563eb;
+    color: white;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 15px;
+}
+
+/* INPUT */
+.input-pro {
+    border-radius: 10px;
+    height: 45px;
+}
+
+/* BUTTON */
+.btn-pro {
+    height: 45px;
+    border-radius: 10px;
+}
+body {
+    background: red !important;
+}
 }

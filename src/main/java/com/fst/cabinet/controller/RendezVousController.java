@@ -84,7 +84,7 @@ public class RendezVousController {
 
         rendezVousService.save(rendezVous);
 
-        return "redirect:/appointments";
+        return "redirect:/appointments/dashboard";
     }
 
     // =========================

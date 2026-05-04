@@ -9,7 +9,7 @@
     <style>
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #0d6efd, #6ea8fe);
+            background: #f5f7fb;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,37 +17,76 @@
         }
 
         .signup-card {
-            width: 500px;
-            padding: 30px;
-            border-radius: 18px;
+            width: 480px;
+            padding: 35px;
+            border-radius: 20px;
             background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
 
         .title {
-            font-weight: bold;
+            font-weight: 700;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
+            font-size: 22px;
         }
 
-        .form-control, .form-select {
-            border-radius: 10px;
+        .subtitle {
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 25px;
         }
 
-        .btn {
-            border-radius: 10px;
+        .form-control {
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .btn-primary {
+            border-radius: 12px;
+            padding: 10px;
+            font-weight: 600;
+        }
+
+        .btn-outline-secondary {
+            border-radius: 12px;
+        }
+
+        .upload-box {
+            border: 2px dashed #dcdcdc;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .upload-box:hover {
+            border-color: #0d6efd;
+            background: #f8fbff;
         }
     </style>
 </head>
 
 <body>
 
-<div class="signup-card shadow-lg">
+<div class="signup-card">
 
     <div class="title">
-        🏥 Inscription Patient / Utilisateur
+        Créer un compte
     </div>
 
-    <form th:action="@{/signup}" method="post">
+    <div class="subtitle">
+        Rejoignez notre espace patient
+    </div>
+
+    <form th:action="@{/signup}" method="post" enctype="multipart/form-data">
 
         <!-- NAME -->
         <div class="mb-2">
@@ -80,15 +119,23 @@
         </div>
 
         <!-- CIN -->
-<div class="mb-2">
-    <label class="form-label">CIN</label>
-    <input type="text" name="cin" class="form-control" required>
-</div>
+        <div class="mb-2">
+            <label class="form-label">CIN</label>
+            <input type="text" name="cin" class="form-control" required>
+        </div>
 
         <!-- PHONE -->
         <div class="mb-2">
             <label class="form-label">Téléphone</label>
             <input type="text" name="telephone" class="form-control">
+        </div>
+
+        <!-- IMAGE UPLOAD -->
+        <div class="mb-3">
+            <label class="form-label">Photo de profil (optionnel)</label>
+            <div class="upload-box">
+                <input type="file" name="image" class="form-control" style="border:none;">
+            </div>
         </div>
 
         <hr>

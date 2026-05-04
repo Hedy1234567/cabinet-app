@@ -1,214 +1,246 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Médecins - Cabinet Médical</title>
+<meta charset="UTF-8">
+<title>Liste des médecins</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<style>
 
-    <style>
-        .content {
-            margin-left: 80px;
-            padding: 20px;
-            transition: 0.3s;
-        }
-    </style>
+/* BACKGROUND */
+body {
+    background: #f5f7fb;
+    font-family: 'Segoe UI', sans-serif;
+}
 
+/* CONTENT */
+.content {
+    margin-left: 80px;
+    padding: 30px;
+}
 
+/* TITLE */
+.page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+}
 
+/* SEARCH */
+.search-box {
+    background: white;
+    border-radius: 18px;
+    padding: 15px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
 
-    <style>
-        body {
-            background: #f4f6f9;
-        }
+/* CARD */
+.med-card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
 
-        .top-bar {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-        }
+.med-card:hover {
+    transform: translateY(-4px);
+}
 
-        .page-title {
-            font-weight: 700;
-        }
+/* TOP */
+.med-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .card {
-            border: none;
-            border-radius: 15px;
-        }
+/* LEFT */
+.med-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
 
-        .btn {
-            border-radius: 10px;
-        }
+/* AVATAR */
+.avatar {
+    width: 60px;
+    height: 60px;
+    background: #e6edff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
 
-        .table thead {
-            background: #0d6efd;
-            color: white;
-        }
+/* NAME */
+.med-name {
+    font-weight: 600;
+}
 
-        .table {
-            border-radius: 12px;
-            overflow: hidden;
-        }
-    </style>
+/* SPECIALITE */
+.med-spec {
+    color: #2563eb;
+    font-size: 14px;
+}
+
+/* CONTACT */
+.med-contact {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* STATS */
+.med-stats {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.stat-box {
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.stat-blue {
+    background: #eef2ff;
+    color: #2563eb;
+}
+
+.stat-green {
+    background: #e6f7ee;
+    color: green;
+}
+
+/* BUTTON */
+.btn {
+    border-radius: 10px;
+}
+
+</style>
 </head>
 
 <body>
 
+<!-- SIDEBAR -->
 <div th:replace="fragments/sidebar :: sidebar"></div>
+
 <div class="content">
-<div class="container py-4">
+<div class="container">
 
-    <!-- HEADER -->
-    <div class="top-bar d-flex justify-content-between align-items-center mb-4 shadow-sm">
-
-        <div>
-            <h2 class="page-title mb-0">👨‍⚕️ Gestion des Médecins</h2>
-            <small class="text-muted">Liste des médecins du cabinet</small>
-        </div>
-
-        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-   href="/medecins/add"
-   class="btn btn-primary">
-    + Ajouter un médecin
-</a>
-
+    <!-- TITLE -->
+    <div class="mb-4">
+        <h1 class="page-title">Liste des médecins</h1>
+        <p class="text-muted">Équipe médicale du cabinet</p>
     </div>
 
     <!-- SEARCH -->
-    <div class="card shadow-sm mb-4">
-    <div class="card-body">
-
-        <div class="row g-2">
-
-            <div class="col-md-3">
-                <input id="searchNom" class="form-control" placeholder="Nom">
-            </div>
-
-            <div class="col-md-3">
-                <input id="searchPrenom" class="form-control" placeholder="Prénom">
-            </div>
-
-            <div class="col-md-3">
-                <input id="searchSpec" class="form-control" placeholder="Spécialité">
-            </div>
-
-            <div class="col-md-3">
-                <input id="searchNum" class="form-control" placeholder="Numéro ordre">
-            </div>
-
-        </div>
-
+    <div class="search-box">
+        <input id="searchInput" class="form-control"
+               placeholder="Rechercher un médecin...">
     </div>
-</div>
 
-    <!-- TABLE -->
-    <div class="card shadow-sm">
-        <div class="card-body p-0">
+    <!-- LIST -->
+    <div class="row" id="medList">
 
-            <table class="table table-hover align-middle mb-0">
+        <div class="col-md-6" th:each="m : ${medecins}">
 
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Spécialité</th>
-                        <th>Numéro ordre</th>
-                        <th>Email</th>
-                        <th>Téléphone</th>
-                        <th>Actif</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+            <div class="med-card">
 
-                <tbody>
+                <!-- TOP -->
+                <div class="med-top">
 
-                    <tr th:each="m : ${medecins}">
+                    <div class="med-left">
 
-                        <td th:text="${m.id}"></td>
-                        <td th:text="${m.nom}"></td>
-                        <td th:text="${m.prenom}"></td>
-                        <td th:text="${m.specialite}"></td>
-                        <td th:text="${m.numeroOrdre}"></td>
-                        <td th:text="${m.email}"></td>
-                        <td th:text="${m.telephone}"></td>
+                        <div class="avatar">🩺</div>
 
-                        <td>
-                            <span th:text="${m.actif} ? 'Oui' : 'Non'"
-                                  th:classappend="${m.actif} ? 'text-success' : 'text-danger'">
-                            </span>
-                        </td>
+                        <div>
+                            <div class="med-name"
+                                 th:text="'Dr. ' + ${m.nom} + ' ' + ${m.prenom}">
+                            </div>
 
-                        <td>
+                            <div class="med-spec"
+                                 th:text="${m.specialite}">
+                            </div>
+                        </div>
 
-                            <a th:href="@{/medecins/{id}(id=${m.id})}" class="btn btn-info btn-sm">
-    Voir
-</a>
+                    </div>
 
-<a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-   th:href="@{/medecins/edit/{id}(id=${m.id})}"
-   class="btn btn-warning btn-sm">
-    Modifier
-</a>
+                </div>
 
-<a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-   th:href="@{/medecins/delete/{id}(id=${m.id})}"
-   class="btn btn-danger btn-sm">
-    Supprimer
-</a>
+                <!-- CONTACT -->
+                <div class="med-contact">
+                    <div>📧 <span th:text="${m.email}"></span></div>
+                    <div>📞 <span th:text="${m.telephone}"></span></div>
+                </div>
 
-                        </td>
+                <!-- STATS -->
+                <div class="med-stats">
+                    <div class="stat-box stat-blue">
+                        <strong>-- ans</strong><br>
+                        <small>Expérience</small>
+                    </div>
 
-                    </tr>
+                    <div class="stat-box stat-green">
+                        <strong>--</strong><br>
+                        <small>Patients</small>
+                    </div>
+                </div>
 
-                    <tr th:if="${#lists.isEmpty(medecins)}">
-                        <td colspan="9" class="text-center text-muted p-4">
-                            Aucun médecin disponible
-                        </td>
-                    </tr>
+                <!-- ACTIONS -->
+                <div class="mt-3">
 
-                </tbody>
+                    <a th:href="@{/medecins/{id}(id=${m.id})}"
+                       class="btn btn-info btn-sm">
+                        Voir
+                    </a>
 
-            </table>
+                    <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+                       th:href="@{/medecins/edit/{id}(id=${m.id})}"
+                       class="btn btn-warning btn-sm">
+                        Modifier
+                    </a>
+
+                    <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+                       th:href="@{/medecins/delete/{id}(id=${m.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Supprimer ce médecin ?')">
+                        Supprimer
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
+
+        <!-- EMPTY -->
+        <div th:if="${#lists.isEmpty(medecins)}"
+             class="text-center text-muted mt-4">
+            Aucun médecin disponible
+        </div>
+
     </div>
 
 </div>
 </div>
 
 <script>
-function filterTable() {
+document.getElementById("searchInput").addEventListener("keyup", function () {
 
-    let nom = document.getElementById("searchNom").value.toLowerCase();
-    let prenom = document.getElementById("searchPrenom").value.toLowerCase();
-    let spec = document.getElementById("searchSpec").value.toLowerCase();
-    let num = document.getElementById("searchNum").value.toLowerCase();
+    let value = this.value.toLowerCase();
+    let cards = document.querySelectorAll(".med-card");
 
-    let rows = document.querySelectorAll("tbody tr");
-
-    rows.forEach(row => {
-
-        let cNom = row.cells[1].innerText.toLowerCase();
-        let cPrenom = row.cells[2].innerText.toLowerCase();
-        let cSpec = row.cells[3].innerText.toLowerCase();
-        let cNum = row.cells[4].innerText.toLowerCase();
-
-        let match =
-            cNom.includes(nom) &&
-            cPrenom.includes(prenom) &&
-            cSpec.includes(spec) &&
-            cNum.includes(num);
-
-        row.style.display = match ? "" : "none";
+    cards.forEach(card => {
+        let text = card.innerText.toLowerCase();
+        card.style.display = text.includes(value) ? "" : "none";
     });
-}
 
-// attach events
-["searchNom","searchPrenom","searchSpec","searchNum"].forEach(id => {
-    document.getElementById(id).addEventListener("keyup", filterTable);
 });
 </script>
 

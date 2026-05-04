@@ -1,123 +1,244 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Cabinet Médical - Dashboard</title>
+<meta charset="UTF-8">
+<title>Dashboard Secrétaire</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<style>
 
+/* BACKGROUND */
+body {
+    background: #f5f7fb;
+    font-family: 'Segoe UI', sans-serif;
+}
 
-    <style>
-        .content {
-            margin-left: 80px;
-            padding: 20px;
-            transition: 0.3s;
-        }
-    </style>
+/* TOPBAR */
+.topbar {
+    height: 70px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
 
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
+.brand-icon {
+    width: 40px;
+    height: 40px;
+    background: #2563eb;
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.brand-text {
+    font-weight: 700;
+}
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #f4f6f9, #e9eef5);
-            min-height: 100vh;
-        }
+.brand-sub {
+    font-size: 12px;
+    color: gray;
+}
 
-        .navbar {
-            background: #0d6efd;
-        }
+.user-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
 
-        .navbar-brand {
-            font-weight: bold;
-            color: white !important;
-        }
+/* CONTENT */
+.content {
+    margin-left: 80px;
+    padding: 30px;
+}
 
-        .dashboard-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-        }
+/* TITLE */
+.dashboard-title {
+    font-size: 2.3rem;
+    font-weight: 700;
+}
 
-        .card-dashboard {
-            border: none;
-            border-radius: 15px;
-            transition: 0.3s;
-            cursor: pointer;
-        }
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
 
-        .card-dashboard:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
+/* CARD */
+.card-dashboard {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    transition: 0.3s;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
 
-        .icon-box {
-            font-size: 40px;
-        }
-    </style>
+.card-dashboard:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+/* COLORS */
+.card-blue { background: #e8f0ff; }
+.card-green { background: #e6f7ee; }
+.card-purple { background: #f3e8ff; }
+.card-main {
+    background: #2563eb;
+    color: white;
+}
+
+/* ICON */
+.icon-box {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+/* BADGE */
+.badge-number {
+    float: right;
+    background: rgba(0,0,0,0.1);
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+/* LINK FIX */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+</style>
+
 </head>
 
 <body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+
+    <div class="brand">
+        <div class="brand-icon">+</div>
+        <div>
+            <div class="brand-text">Cabinet Médical</div>
+            <div class="brand-sub">Espace Secrétaire</div>
+        </div>
+    </div>
+
+    <div class="user-box">
+        <div>👤 Claire Moreau</div>
+        <a href="/logout" class="text-primary">Déconnexion</a>
+    </div>
+
+</div>
+
+<!-- SIDEBAR -->
 <div th:replace="fragments/sidebar :: sidebar"></div>
 
-
-<!-- MAIN CONTENT -->
+<!-- CONTENT -->
 <div class="content">
-<div class="container py-5">
+<div class="container">
 
-    <!-- WELCOME -->
-    <div class="text-center mb-5">
-        <h1 class="dashboard-title">Bienvenue 👋</h1>
-        <p class="text-muted">Système de gestion du cabinet médical</p>
+    <!-- TITLE -->
+    <div class="mb-4">
+        <h1 class="dashboard-title">Tableau de bord</h1>
+        <p class="text-muted">Gestion du cabinet médical</p>
     </div>
 
-    <!-- CARDS -->
-    <div class="row g-4 justify-content-center">
+    <!-- GRID -->
+    <div class="grid">
+
+        <!-- RDV TODAY -->
+        <a href="/appointments/calendar">
+            <div class="card-dashboard card-blue">
+                <div class="badge-number">1</div>
+                <div class="icon-box">📅</div>
+                <h5>RDV aujourd'hui</h5>
+                <small>Rendez-vous du jour</small>
+            </div>
+        </a>
 
         <!-- PATIENTS -->
-        <div class="col-md-4">
-            <a href="/patients" class="text-decoration-none text-dark">
-                <div class="card card-dashboard text-center p-4">
-                    <div class="icon-box">👤</div>
-                    <h4 class="mt-3">Patients</h4>
-                    <p class="text-muted">Gestion des dossiers patients</p>
-                </div>
-            </a>
-        </div>
+        <a href="/patients">
+            <div class="card-dashboard card-green">
+                <div class="badge-number">5</div>
+                <div class="icon-box">👥</div>
+                <h5>Patients</h5>
+                <small>Total patients</small>
+            </div>
+        </a>
 
         <!-- MEDECINS -->
-        <div class="col-md-4">
-            <a href="/medecins" class="text-decoration-none text-dark">
-                <div class="card card-dashboard text-center p-4">
-                    <div class="icon-box">👨‍⚕️</div>
-                    <h4 class="mt-3">Médecins</h4>
-                    <p class="text-muted">Gestion des médecins</p>
-                </div>
-            </a>
-        </div>
+        <a href="/medecins">
+            <div class="card-dashboard card-purple">
+                <div class="badge-number">4</div>
+                <div class="icon-box">🩺</div>
+                <h5>Médecins</h5>
+                <small>Équipe médicale</small>
+            </div>
+        </a>
 
-       <!-- APPOINTMENTS CARD (ADMIN + MEDECIN + SECRETAIRE ONLY) -->
-    <a href="/appointments" class="text-decoration-none text-dark">
+        <!-- VIEW RDV -->
+        <a href="/appointments">
+            <div class="card-dashboard">
+                <div class="icon-box">📋</div>
+                <h5>Voir les rendez-vous</h5>
+                <small>Gérer tous les RDV</small>
+            </div>
+        </a>
 
-        <div class="card card-dashboard text-center p-4">
+        <!-- CALENDAR -->
+        <a href="/appointments/calendar">
+            <div class="card-dashboard">
+                <div class="icon-box">🗓️</div>
+                <h5>Calendrier</h5>
+                <small>Vue complète</small>
+            </div>
+        </a>
 
-            <div class="icon-box">📅</div>
+        <!-- ADD RDV -->
+        <a href="/appointments/add">
+            <div class="card-dashboard card-main">
+                <div class="icon-box">➕</div>
+                <h5>Ajouter rendez-vous</h5>
+                <small>Créer un nouveau RDV</small>
+            </div>
+        </a>
 
-            <h4 class="mt-3">Rendez-vous</h4>
+        <!-- LIST PATIENTS -->
+        <a href="/patients">
+            <div class="card-dashboard">
+                <div class="icon-box">👤</div>
+                <h5>Liste des patients</h5>
+                <small>Gérer les patients</small>
+            </div>
+        </a>
 
-            <p class="text-muted">
-                Gestion des rendez-vous patients
-            </p>
-
-        </div>
-
-    </a>
+        <!-- LIST MEDECINS -->
+        <a href="/medecins">
+            <div class="card-dashboard">
+                <div class="icon-box">🧑‍⚕️</div>
+                <h5>Liste des médecins</h5>
+                <small>Voir l'équipe</small>
+            </div>
+        </a>
 
     </div>
 
-
-
 </div>
 </div>
+
 </body>
 </html>

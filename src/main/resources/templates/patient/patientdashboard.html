@@ -2,10 +2,90 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>My Appointments</title>
+<meta charset="UTF-8">
+<title>My Appointments</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+/* BACKGROUND */
+body {
+    background: #f5f7fb;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 900px;
+}
+
+/* TITLE */
+h2 {
+    font-weight: 700;
+}
+
+/* CARD */
+.rdv-card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+/* TOP */
+.rdv-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* LEFT */
+.rdv-left {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* ICON */
+.icon-box {
+    width: 50px;
+    height: 50px;
+    background: #2563eb;
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* STATUS */
+.status {
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+}
+
+/* COLORS */
+.status-CONFIRME { background:#e6f7ee; color:green; }
+.status-ANNULE { background:#fde8e8; color:red; }
+.status-TERMINE { background:#e8f0ff; color:#2563eb; }
+
+/* INFO */
+.rdv-info {
+    display: flex;
+    gap: 40px;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* BUTTON */
+.btn {
+    border-radius: 10px;
+}
+
+</style>
 </head>
 
 <body>
@@ -14,41 +94,73 @@
 
     <h2 class="mb-4">📅 My Appointments</h2>
 
-    <table class="table table-bordered table-hover">
+    <!-- EMPTY -->
+    <div th:if="${#lists.isEmpty(appointments)}"
+         class="text-center text-muted">
+        No appointments found
+    </div>
 
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Doctor</th>
-            <th>Date</th>
-            <th>Duration</th>
-            <th>Status</th>
-        </tr>
-        </thead>
+    <!-- LOOP -->
+    <div th:each="a : ${appointments}" class="rdv-card">
 
-        <tbody>
+        <div class="rdv-top">
 
-        <!-- IF NO APPOINTMENTS -->
-        <tr th:if="${#lists.isEmpty(appointments)}">
-            <td colspan="5" class="text-center text-muted">
-                No appointments found
-            </td>
-        </tr>
+            <div class="rdv-left">
 
-        <!-- LOOP ONLY PATIENT APPOINTMENTS -->
-        <tr th:each="a : ${appointments}">
-            <td th:text="${a.id}"></td>
-            <td th:text="${a.medecin.nom + ' ' + a.medecin.prenom}"></td>
-            <td th:text="${a.dateHeure}"></td>
-            <td th:text="${a.dureeMinutes} + ' min'"></td>
-            <td>
-                <span class="badge bg-success">Confirmed</span>
-            </td>
-        </tr>
+                <div class="icon-box">📅</div>
 
-        </tbody>
+                <div>
+                    <strong th:text="${a.medecin.specialite}">Médecine</strong><br>
+                    <small th:text="${a.medecin.nom + ' ' + a.medecin.prenom}"></small>
+                </div>
 
-    </table>
+            </div>
+
+            <!-- STATUS -->
+            <div class="status"
+                 th:classappend="'status-' + ${a.statut}">
+                <span th:text="${a.statut}">Confirmé</span>
+            </div>
+
+        </div>
+
+        <!-- INFO -->
+        <div class="rdv-info">
+            <div>📅 <span th:text="${#temporals.format(a.dateHeure,'yyyy-MM-dd')}"></span></div>
+            <div>⏰ <span th:text="${#temporals.format(a.dateHeure,'HH:mm')}"></span></div>
+            <div>⏱️ <span th:text="${a.dureeMinutes} + ' min'"></span></div>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="mt-3">
+
+            <!-- VIEW -->
+            <a th:href="@{/appointments/{id}(id=${a.id})}"
+               class="btn btn-info btn-sm">
+                Voir
+            </a>
+
+            <!-- CANCEL -->
+            <form th:action="@{/appointments/delete/{id}(id=${a.id})}"
+                  method="post"
+                  style="display:inline;">
+
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+
+                <button type="submit"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Annuler ce rendez-vous ?')">
+
+                    Annuler
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </div>
 
