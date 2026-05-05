@@ -169,32 +169,62 @@ a {
     text-decoration: none;
     color: inherit;
 }
+.logout-link {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+/* ===== GLOBAL BACKGROUND IMAGE ===== */
+.global-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(30,64,175,0.85),
+            rgba(37,99,235,0.65)
+        ),
+        url('https://images.unsplash.com/photo-1765222385545-71472fe6ee96?q=80&w=1920');
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    z-index: -1;
+}
+
+/* OPTIONAL: باش الكروت يبانوا clean */
+.card,
+.signup-card,
+.login-card,
+.container,
+.topbar,
+.content {
+    position: relative;
+    z-index: 1;
+}
 
 </style>
 
 </head>
 
 <body>
+<!-- BACKGROUND HERO -->
+<div class="global-bg"></div>
 
-<!-- TOP NAVBAR -->
-<div class="topbar">
+<div th:replace="fragments/navbar :: navbar"></div>
 
-    <!-- LEFT -->
-    <div class="brand">
-        <div class="brand-icon">+</div>
-        <div>
-            <div class="brand-text">Cabinet Médical</div>
-            <div class="brand-sub">Espace Patient</div>
-        </div>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="user-box">
-        <div class="user-name">👤 Jean Dupont</div>
-        <a href="/logout" class="logout">Déconnexion</a>
-    </div>
-
-</div>
 
 <!-- SIDEBAR -->
 <div th:replace="fragments/sidebar :: sidebar"></div>
@@ -241,7 +271,7 @@ a {
             <div class="icon-box">⏱️</div>
             <h5>RDV à venir</h5>
             <p>Prochaines consultations</p>
-            <strong style="font-size:20px;">2</strong>
+            <strong th:text="${#lists.size(rdvs)}" style="font-size:20px;"></strong>
         </div>
 
     </div>
@@ -251,27 +281,24 @@ a {
 
         <h5>Prochains rendez-vous</h5>
 
-        <div class="rdv-item">
-            <div>
-                <strong>Dr Martin Dubois</strong><br>
-                <small>Médecine générale</small>
-            </div>
-            <div>
-                2026-05-05<br>
-                <small>10:00</small>
-            </div>
-        </div>
+        <div th:each="r : ${rdvs}" class="rdv-item">
 
-        <div class="rdv-item">
-            <div>
-                <strong>Dr Sophie Bernard</strong><br>
-                <small>Cardiologie</small>
-            </div>
-            <div>
-                2026-05-12<br>
-                <small>14:30</small>
-            </div>
-        </div>
+    <div>
+        <strong th:text="${r.medecin.nom + ' ' + r.medecin.prenom}">
+            Médecin
+        </strong><br>
+
+        <small th:text="${r.medecin.specialite}">
+            Spécialité
+        </small>
+    </div>
+
+    <div>
+        <span th:text="${#temporals.format(r.dateHeure,'yyyy-MM-dd')}"></span><br>
+        <small th:text="${#temporals.format(r.dateHeure,'HH:mm')}"></small>
+    </div>
+
+</div>
 
         <a href="/patient/patientdashboard" class="btn btn-outline-primary btn-link-custom">
             Voir tous mes rendez-vous

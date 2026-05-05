@@ -153,63 +153,92 @@
 
     <hr>
 
-    <!-- PATIENT DASHBOARD (HOME FOR PATIENT) -->
-    <span th:if="${activePage == 'patient-dashboard'}"
-          class="sidebar-item active">
-        <span class="icon">🏠</span>
-        <span class="label">Accueil</span>
-    </span>
+    <!-- ===================== -->
+    <!-- PATIENT -->
+    <!-- ===================== -->
+    <div th:if="${#authorization.expression('hasRole(''PATIENT'')')}">
 
-    <a th:if="${activePage != 'patient-dashboard'}"
-       href="/patient/dashboard"
-       class="sidebar-item">
-        <span class="icon">🏠</span>
-        <span class="label">Accueil</span>
-    </a>
+        <a th:classappend="${activePage == 'patient-appointments'} ? ' active' : ''"
+           href="/patient/patientdashboard"
+           class="sidebar-item">
+            <span class="icon">📅</span>
+            <span class="label">Mes Rendez-vous</span>
+        </a>
 
-    <!-- MY APPOINTMENTS -->
-    <span th:if="${activePage == 'patient-appointments'}"
-          class="sidebar-item active">
-        <span class="icon">📅</span>
-        <span class="label">Mes Rendez-vous</span>
-    </span>
+        <a th:classappend="${activePage == 'patient-book'} ? ' active' : ''"
+           href="/patient/add"
+           class="sidebar-item">
+            <span class="icon">➕</span>
+            <span class="label">Réserver</span>
+        </a>
 
-    <a th:if="${activePage != 'patient-appointments'}"
-       href="/patient/appointments"
-       class="sidebar-item">
-        <span class="icon">📅</span>
-        <span class="label">Mes Rendez-vous</span>
-    </a>
+        <a th:classappend="${activePage == 'patient-calendar'} ? ' active' : ''"
+           href="/appointments/calendar"
+           class="sidebar-item">
+            <span class="icon">🗓️</span>
+            <span class="label">Calendrier</span>
+        </a>
 
-    <!-- BOOK APPOINTMENT -->
-    <span th:if="${activePage == 'patient-book'}"
-          class="sidebar-item active">
-        <span class="icon">➕</span>
-        <span class="label">Réserver</span>
-    </span>
+    </div>
 
-    <a th:if="${activePage != 'patient-book'}"
-       href="/patient/book"
-       class="sidebar-item">
-        <span class="icon">➕</span>
-        <span class="label">Réserver</span>
-    </a>
+    <!-- ===================== -->
+    <!-- MEDECIN -->
+    <!-- ===================== -->
+    <div th:if="${#authorization.expression('hasRole(''MEDECIN'')')}">
 
-    <!-- CALENDAR -->
-    <span th:if="${activePage == 'patient-calendar'}"
-          class="sidebar-item active">
-        <span class="icon">🗓️</span>
-        <span class="label">Calendrier</span>
-    </span>
+        <a th:classappend="${activePage == 'patients'} ? ' active' : ''"
+           href="/patients"
+           class="sidebar-item">
+            <span class="icon">👥</span>
+            <span class="label">Patients</span>
+        </a>
 
-    <a th:if="${activePage != 'patient-calendar'}"
-       href="/patient/calendar"
-       class="sidebar-item">
-        <span class="icon">🗓️</span>
-        <span class="label">Calendrier</span>
-    </a>
+        <a th:classappend="${activePage == 'appointments'} ? ' active' : ''"
+           href="/appointments"
+           class="sidebar-item">
+            <span class="icon">📅</span>
+            <span class="label">Rendez-vous</span>
+        </a>
+
+    </div>
+
+    <!-- ===================== -->
+    <!-- ADMIN / SECRETAIRE -->
+    <!-- ===================== -->
+    <div th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''SECRETAIRE'')')}">
+
+        <a th:classappend="${activePage == 'appointments'} ? ' active' : ''"
+           href="/appointments"
+           class="sidebar-item">
+            <span class="icon">📋</span>
+            <span class="label">Tous les RDV</span>
+        </a>
+
+        <a th:classappend="${activePage == 'add-appointment'} ? ' active' : ''"
+           href="/appointments/add"
+           class="sidebar-item">
+            <span class="icon">➕</span>
+            <span class="label">Ajouter RDV</span>
+        </a>
+
+        <a th:classappend="${activePage == 'patients'} ? ' active' : ''"
+           href="/patients"
+           class="sidebar-item">
+            <span class="icon">👤</span>
+            <span class="label">Patients</span>
+        </a>
+
+        <a th:classappend="${activePage == 'medecins'} ? ' active' : ''"
+           href="/medecins"
+           class="sidebar-item">
+            <span class="icon">🩺</span>
+            <span class="label">Médecins</span>
+        </a>
+
+    </div>
 
     <hr>
+
 
     <!-- LOGOUT -->
     <form th:action="@{/logout}" method="post" style="margin:0;">

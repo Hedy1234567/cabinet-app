@@ -94,6 +94,13 @@ h2 {
 
     <h2 class="mb-4">📅 My Appointments</h2>
 
+    <div class="d-flex justify-content-end mb-3">
+    <a href="/patient/dashboard" class="btn btn-outline-primary btn-sm">
+        ⬅ Back to Dashboard
+    </a>
+</div>
+
+
     <!-- EMPTY -->
     <div th:if="${#lists.isEmpty(appointments)}"
          class="text-center text-muted">

@@ -139,6 +139,18 @@ body {
         <p class="text-muted">Équipe médicale du cabinet</p>
     </div>
 
+    <div class="mb-3">
+
+    <!-- RETURN BUTTON (ADMIN + SECRETAIRE ONLY) -->
+    <a th:href="@{/dashboard}"
+       class="btn btn-secondary"
+       sec:authorize="hasAnyRole('ADMIN','SECRETAIRE')">
+
+        ⬅ Retour au tableau de bord
+    </a>
+
+</div>
+
     <!-- SEARCH -->
     <div class="search-box">
         <input id="searchInput" class="form-control"
@@ -182,14 +194,14 @@ body {
                 <!-- STATS -->
                 <div class="med-stats">
                     <div class="stat-box stat-blue">
-                        <strong>-- ans</strong><br>
+                        <strong><span th:text="${T(java.lang.Math).floor(T(java.lang.Math).random() * 30) + 1}"></span> ans</span></strong><br>
                         <small>Expérience</small>
                     </div>
 
                     <div class="stat-box stat-green">
-                        <strong>--</strong><br>
-                        <small>Patients</small>
-                    </div>
+    <strong th:text="${patientCounts.get(m.id) != null ? patientCounts.get(m.id) : 0}"></strong><br>
+    <small>Patients</small>
+</div>
                 </div>
 
                 <!-- ACTIONS -->

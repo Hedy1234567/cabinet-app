@@ -99,25 +99,25 @@ label {
                 <!-- PATIENT -->
                 <div class="mb-3">
                     <label>Patient</label>
-                    <select name="patient" class="form-select" required>
-                        <option value="">-- Choisir Patient --</option>
-                        <option th:each="p : ${patients}"
-                                th:value="${p.id}"
-                                th:text="${p.nom + ' ' + p.prenom}">
-                        </option>
-                    </select>
+                    <select name="patientId" class="form-select" required>
+    <option value="">-- Choisir Patient --</option>
+    <option th:each="p : ${patients}"
+            th:value="${p.id}"
+            th:text="${p.nom + ' ' + p.prenom}">
+    </option>
+</select>
                 </div>
 
                 <!-- MEDECIN -->
                 <div class="mb-3">
                     <label>Médecin</label>
-                    <select name="medecin" class="form-select" required>
-                        <option value="">-- Choisir Médecin --</option>
-                        <option th:each="m : ${medecins}"
-                                th:value="${m.id}"
-                                th:text="${m.nom + ' ' + m.prenom}">
-                        </option>
-                    </select>
+                    <select name="medecinId" class="form-select" required>
+    <option value="">-- Choisir Médecin --</option>
+    <option th:each="m : ${medecins}"
+            th:value="${m.id}"
+            th:text="${m.nom + ' ' + m.prenom}">
+    </option>
+</select>
                 </div>
 
                 <!-- DATE -->

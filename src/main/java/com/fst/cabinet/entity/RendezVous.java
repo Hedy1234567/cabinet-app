@@ -2,6 +2,8 @@ package com.fst.cabinet.entity;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,6 +41,7 @@ public class RendezVous {
     @JoinColumn(name = "medecin_id", nullable = false)
     private Medecin medecin;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @Column(name = "date_heure", nullable = false)
     private LocalDateTime dateHeure;
 
@@ -51,4 +54,6 @@ public class RendezVous {
 
     @Column(length = 255)
     private String motif;
+
+
 }

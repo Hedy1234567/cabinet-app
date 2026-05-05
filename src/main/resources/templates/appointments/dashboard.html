@@ -107,6 +107,18 @@ body {
     pointer-events: none;
     opacity: 0.6;
 }
+.logout-link {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
 
 </style>
 </head>
@@ -119,10 +131,45 @@ body {
 <div class="container">
 
     <!-- HEADER -->
-    <div class="top-bar">
 
+
+
+
+
+    <div class="top-bar">
+        <div class="mb-3">
+
+    <!-- PATIENT -->
+    <a sec:authorize="hasRole('PATIENT')"
+       th:href="@{/patient/dashboard}"
+       class="btn btn-outline-primary btn-sm">
+        ⬅ Dashboard
+    </a>
+
+    <!-- MEDECIN -->
+    <a sec:authorize="hasRole('MEDECIN')"
+       th:href="@{/medecin/dashboard}"
+       class="btn btn-outline-primary btn-sm">
+        ⬅ Dashboard
+    </a>
+
+    <!-- SECRETAIRE -->
+    <a sec:authorize="hasRole('SECRETAIRE')"
+       th:href="@{/secretaire/dashboard}"
+       class="btn btn-outline-primary btn-sm">
+        ⬅ Dashboard
+    </a>
+
+    <!-- ADMIN -->
+    <a sec:authorize="hasRole('ADMIN')"
+       th:href="@{/admin/dashboard}"
+       class="btn btn-outline-primary btn-sm">
+        ⬅ Dashboard
+    </a>
+
+</div>
         <div>
-            <h1 class="page-title">Mes rendez-vous</h1>
+            <h1 class="page-title">Les rendez-vous</h1>
             <p class="text-muted">Historique et rendez-vous à venir</p>
         </div>
 

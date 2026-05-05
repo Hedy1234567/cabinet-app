@@ -72,4 +72,12 @@ public class PatientService {
            .orElseThrow();
 }
 
+    public List<Patient> getRecentPatients() {
+    return patientRepository.findTop5ByOrderByIdDesc();
+}
+
+    public Patient getById(Long id) {
+    return patientRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Patient not found"));
+}
 }

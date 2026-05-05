@@ -130,29 +130,61 @@ a {
     text-decoration: none;
     color: inherit;
 }
+.logout-link {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+
+/* ===== GLOBAL BACKGROUND IMAGE ===== */
+.global-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(30,64,175,0.85),
+            rgba(37,99,235,0.65)
+        ),
+        url('https://images.unsplash.com/photo-1765222385545-71472fe6ee96?q=80&w=1920');
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    z-index: -1;
+}
+
+/* OPTIONAL: باش الكروت يبانوا clean */
+.card,
+.signup-card,
+.login-card,
+.container,
+.topbar,
+.content {
+    position: relative;
+    z-index: 1;
+}
 
 </style>
 </head>
 
 <body>
+<!-- BACKGROUND HERO -->
+<div class="global-bg"></div>
 
-<!-- TOPBAR -->
-<div class="topbar">
-
-    <div class="brand">
-        <div class="brand-icon">+</div>
-        <div>
-            <div class="brand-text">Cabinet Médical</div>
-            <div class="brand-sub">Espace Médecin</div>
-        </div>
-    </div>
-
-    <div class="user-box">
-        <div>👨‍⚕️ Dr Martin Dubois</div>
-        <a href="/logout" class="text-primary">Déconnexion</a>
-    </div>
-
-</div>
+<div th:replace="fragments/navbar :: navbar"></div>
 
 <!-- SIDEBAR -->
 <div th:replace="fragments/sidebar :: sidebar"></div>
@@ -190,10 +222,15 @@ a {
 
         <!-- TODAY -->
         <div class="card-dashboard card-green">
-            <div class="icon-box">🟢</div>
-            <h5>Aujourd'hui</h5>
-            <small>Consultations du jour</small>
-        </div>
+    <div class="icon-box">🟢</div>
+    <h5>Aujourd'hui</h5>
+    <small>Consultations du jour</small>
+
+    <strong style="font-size:20px;"
+            th:text="${todayCount}">
+        0
+    </strong>
+</div>
 
     </div>
 
@@ -202,48 +239,55 @@ a {
 
         <!-- RDV TODAY -->
         <div class="col-md-6">
-            <div class="box">
-                <h5>Rendez-vous du jour</h5>
+    <div class="box">
 
-                <div class="item">
-                    <div>
-                        <strong>Jean Dupont</strong><br>
-                        <small>Consultation de suivi</small>
-                    </div>
-                    <div>10:00</div>
-                </div>
+        <h5>Rendez-vous du jour</h5>
 
-            </div>
+        <div th:if="${#lists.isEmpty(todayRdvs)}">
+            <small>Aucun rendez-vous aujourd’hui</small>
         </div>
+
+        <div th:each="r : ${todayRdvs}" class="item">
+
+            <div>
+                <strong th:text="${r.patient.nom + ' ' + r.patient.prenom}">
+                    Patient
+                </strong><br>
+
+                <small th:text="${r.motif}">
+                    Motif
+                </small>
+            </div>
+
+            <div>
+                <span th:text="${#temporals.format(r.dateHeure,'HH:mm')}"></span>
+            </div>
+
+        </div>
+
+    </div>
+</div>
 
         <!-- RECENT PATIENTS -->
         <div class="col-md-6">
-            <div class="box">
-                <h5>Patients récents</h5>
+    <div class="box">
 
-                <div class="item">
-                    <div>👤 Jean Dupont</div>
-                    <div>
-                        <small>2026-04-28</small>
-                    </div>
-                </div>
+        <h5>Patients récents</h5>
 
-                <div class="item">
-                    <div>👤 Marie Martin</div>
-                    <div>
-                        <small>2026-04-25</small>
-                    </div>
-                </div>
+        <div th:each="p : ${recentPatients}" class="item">
 
-                <div class="item">
-                    <div>👤 Pierre Laurent</div>
-                    <div>
-                        <small>2026-04-20</small>
-                    </div>
-                </div>
-
+            <div>👤
+                <span th:text="${p.nom + ' ' + p.prenom}"></span>
             </div>
+
+            <div>
+                <small th:text="${p.dateCreation}"></small>
+            </div>
+
         </div>
+
+    </div>
+</div>
 
     </div>
 

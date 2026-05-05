@@ -16,10 +16,13 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     Optional<Patient> findByEmail(String email);
     Optional<Patient> findByCin(String cin);
     Optional<Patient> findByAppUser_Username(String username);
+    List<Patient> findTop5ByOrderByIdDesc();
     List<Patient> findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrCinContainingIgnoreCaseOrTelephoneContainingIgnoreCase(
         String nom,
         String prenom,
         String cin,
         String telephone
 );
+
+
 }

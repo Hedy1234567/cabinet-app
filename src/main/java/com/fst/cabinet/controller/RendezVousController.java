@@ -1,5 +1,6 @@
 package com.fst.cabinet.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fst.cabinet.entity.Patient;
 import com.fst.cabinet.entity.RendezVous;
 import com.fst.cabinet.entity.StatutRendezVous;
 import com.fst.cabinet.repository.MedecinRepository;
@@ -78,14 +79,29 @@ public class RendezVousController {
     // SAVE APPOINTMENT
     // =========================
     @PostMapping("/appointments/add")
-    public String saveAppointment(@ModelAttribute RendezVous rendezVous) {
+public String saveAppointment(@RequestParam Long patientId,
+                              @RequestParam Long medecinId,
+                              @RequestParam LocalDateTime dateHeure,
+                              @RequestParam Integer dureeMinutes,
+                              @RequestParam(required = false) String motif) {
 
-        rendezVous.setStatut(StatutRendezVous.PLANIFIE);
+    RendezVous r = new RendezVous();
 
-        rendezVousService.save(rendezVous);
+    r.setPatient(patientRepository.findById(patientId).orElseThrow());
+    r.setMedecin(medecinRepository.findById(medecinId).orElseThrow());
 
-        return "redirect:/appointments/dashboard";
-    }
+    r.setDateHeure(dateHeure);
+    r.setDureeMinutes(dureeMinutes);
+    r.setMotif(motif);
+    r.setStatut(StatutRendezVous.PLANIFIE);
+
+    rendezVousService.save(r);
+
+    return "redirect:/appointments";
+}
+
+    
+
 
     // =========================
     // CALENDAR VIEW
@@ -118,13 +134,20 @@ public class RendezVousController {
     // DELETE (ADMIN ONLY)
     // =========================
     @PostMapping("/appointments/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String deleteAppointment(@PathVariable Long id) {
+    @PreAuthorize("hasAnyRole('ADMIN','PATIENT','MEDECIN','SECRETAIRE')")
+    public String deleteAppointment(@PathVariable Long id, Authentication authentication) {
 
-        rendezVousService.deleteById(id);
+    rendezVousService.deleteById(id);
 
+    boolean isPatient = authentication.getAuthorities().stream()
+        .anyMatch(a -> a.getAuthority().equals("ROLE_PATIENT"));
+
+    if (isPatient) {
+        return "redirect:/patient/patientdashboard";
+    } else {
         return "redirect:/appointments";
     }
+}
 
     // =========================
     // VIEW APPOINTMENT
@@ -174,28 +197,14 @@ public class RendezVousController {
         existing.setStatut(appointment.getStatut());
         existing.setMotif(appointment.getMotif());
 
-        existing.setPatient(appointment.getPatient());
-        existing.setMedecin(appointment.getMedecin());
+        
 
         rendezVousService.save(existing);
 
         return "redirect:/appointments";
     }
 
-    @GetMapping("/patient/patientdashboard")
-public String patientDashboard(Model model, Authentication auth) {
-
-    // get logged user (email or username)
-    String username = auth.getName();
-
-    // fetch ONLY this patient's appointments
-    List<RendezVous> list =
-            rendezVousService.findByPatientUsername(username);
-
-    model.addAttribute("appointments", list);
-
-    return "patient/patientdashboard";
-}
+    
     
     @PostMapping("/patient/add")
 public String saveAppointment(@ModelAttribute RendezVous rdv,

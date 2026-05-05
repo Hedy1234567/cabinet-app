@@ -1,5 +1,6 @@
 package com.fst.cabinet.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -38,7 +39,17 @@ public class RendezVousServiceImpl implements RendezVousService {
     }
 
     @Override
-public List<RendezVous> findByPatientUsername(String username) {
-    return rendezVousRepository.findByPatient_AppUser_Username(username);
+    public List<RendezVous> findByPatientUsername(String username) {
+        return rendezVousRepository.findByPatient_AppUser_Username(username);
+    }
+
+    // ✅ THIS WAS MISSING (YOUR ERROR)
+    @Override
+    public Long countPatientsByMedecin(Long medecinId) {
+        return rendezVousRepository.countByMedecinId(medecinId);
+    }
+    @Override
+public List<RendezVous> findByDateBetween(LocalDateTime start, LocalDateTime end) {
+    return rendezVousRepository.findByDateHeureBetween(start, end);
 }
 }

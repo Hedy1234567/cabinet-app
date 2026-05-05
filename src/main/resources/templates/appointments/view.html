@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Détails Rendez-vous</title>
@@ -146,10 +147,22 @@ small {
 
                     <!-- ACTION -->
                     <div class="mt-4">
-                        <a href="/appointments" class="btn btn-outline-secondary">
-                            ⬅ Retour
-                        </a>
-                    </div>
+
+    <!-- PATIENT -->
+    <a sec:authorize="hasRole('PATIENT')"
+       th:href="@{/patient/patientdashboard}"
+       class="btn btn-outline-secondary">
+        ⬅ Retour
+    </a>
+
+    <!-- NOT PATIENT -->
+    <a sec:authorize="!hasRole('PATIENT')"
+       th:href="@{/appointments}"
+       class="btn btn-outline-secondary">
+        ⬅ Retour
+    </a>
+
+</div>
 
                 </div>
 

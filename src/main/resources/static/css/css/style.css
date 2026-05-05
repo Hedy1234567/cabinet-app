@@ -392,3 +392,15 @@ body {
     background: red !important;
 }
 }
+.logout-link {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}

@@ -1,27 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+
+
 <body>
-<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-white">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold text-primary" th:href="@{/}">
-             Cabinet
-        </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<!-- NAVBAR FRAGMENT -->
+<div th:fragment="navbar">
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/patients}">Patients</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/medecins}">Médecins</a>
-                </li>
-            </ul>
+    <div class="topbar">
+
+        <!-- LEFT -->
+        <div class="brand">
+            <div class="brand-icon">+</div>
+            <div>
+                <div class="brand-text">Cabinet Médical</div>
+                <div class="brand-sub">
+    Espace
+    <span sec:authorize="hasRole('PATIENT')">Patient</span>
+    <span sec:authorize="hasRole('MEDECIN')">Médecin</span>
+    <span sec:authorize="hasRole('ADMIN')">Admin</span>
+    <span sec:authorize="hasRole('SECRETAIRE')">Secrétaire</span>
+</div>
+            </div>
         </div>
+
+        <!-- RIGHT -->
+        <div class="user-box">
+
+            <!-- dynamic username -->
+            <div class="user-name">
+                👤 <span sec:authentication="name"></span>
+            </div>
+
+            <!-- logout -->
+            <form th:action="@{/logout}" method="post" style="margin:0;">
+    <input type="hidden"
+           th:name="${_csrf.parameterName}"
+           th:value="${_csrf.token}" />
+
+    <button type="submit" class="logout-link">
+        Déconnexion
+    </button>
+</form>
+
+        </div>
+
     </div>
-</nav>
+
+</div>
+
 </body>
 </html>

@@ -79,10 +79,49 @@
                 width: 90%;
             }
         }
+
+        /* ===== GLOBAL BACKGROUND IMAGE ===== */
+.global-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(30,64,175,0.85),
+            rgba(37,99,235,0.65)
+        ),
+        url('https://images.unsplash.com/photo-1765222385545-71472fe6ee96?q=80&w=1920');
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    z-index: -1;
+}
+
+/* OPTIONAL: باش الكروت يبانوا clean */
+.card,
+.signup-card,
+.login-card,
+.container,
+.topbar,
+.content {
+    position: relative;
+    z-index: 1;
+}
+
     </style>
 </head>
 
 <body class="login-bg">
+<!-- BACKGROUND HERO -->
+<div class="global-bg"></div>
+
+
 
 <div class="login-wrapper">
 
