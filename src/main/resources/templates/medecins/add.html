@@ -56,71 +56,61 @@
 
                 <div class="card-body p-4">
 
-                    <form th:action="@{/medecins/save}" th:object="${medecin}" method="post">
+                    <h3 class="mb-4">➕ Nouveau Médecin</h3>
 
-                        <div class="row g-3">
+<form th:action="@{/medecins/add}" method="post">
 
-                            <!-- NOM -->
-                            <div class="col-md-6">
-                                <label class="form-label">Nom</label>
-                                <input type="text" th:field="*{nom}" class="form-control" placeholder="Nom">
-                            </div>
+    <!-- NOM -->
+    <div class="mb-3">
+        <label>Nom</label>
+        <input type="text" name="nom" class="form-control" required>
+    </div>
 
-                            <!-- PRENOM -->
-                            <div class="col-md-6">
-                                <label class="form-label">Prénom</label>
-                                <input type="text" th:field="*{prenom}" class="form-control" placeholder="Prénom">
-                            </div>
+    <!-- PRENOM -->
+    <div class="mb-3">
+        <label>Prénom</label>
+        <input type="text" name="prenom" class="form-control" required>
+    </div>
 
-                            <!-- SPECIALITE -->
-                            <div class="col-md-6">
-                                <label class="form-label">Spécialité</label>
-                                <input type="text" th:field="*{specialite}" class="form-control" placeholder="Cardiologue, Généraliste...">
-                            </div>
+    <!-- SPECIALITE -->
+    <div class="mb-3">
+        <label>Spécialité</label>
+        <input type="text" name="specialite" class="form-control" required>
+    </div>
 
-                            <!-- NUMERO ORDRE -->
-                            <div class="col-md-6">
-                                <label class="form-label">Numéro d'ordre</label>
-                                <input type="text" th:field="*{numeroOrdre}" class="form-control" placeholder="Ex: ORD12345">
-                            </div>
+    <!-- NUMERO ORDRE -->
+    <div class="mb-3">
+        <label>Numéro d'ordre</label>
+        <input type="text" name="numeroOrdre" class="form-control" required>
+    </div>
 
-                            <!-- EMAIL -->
-                            <div class="col-md-6">
-                                <label class="form-label">Email</label>
-                                <input type="email" th:field="*{email}" class="form-control" placeholder="email@example.com">
-                            </div>
+    <!-- TELEPHONE -->
+    <div class="mb-3">
+        <label>Téléphone</label>
+        <input type="text" name="telephone" class="form-control">
+    </div>
 
-                            <!-- TELEPHONE -->
-                            <div class="col-md-6">
-                                <label class="form-label">Téléphone</label>
-                                <input type="text" th:field="*{telephone}" class="form-control" placeholder="+216 ...">
-                            </div>
+    <!-- EMAIL -->
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control">
+    </div>
 
-                            <!-- ACTIF -->
-                            <div class="col-md-6">
-                                <label class="form-label">Statut</label>
-                                <select th:field="*{actif}" class="form-select">
-                                    <option value="true">Actif</option>
-                                    <option value="false">Inactif</option>
-                                </select>
-                            </div>
+    <!-- ACTIF -->
+    <div class="mb-3">
+        <label>Actif</label>
+        <select name="actif" class="form-select">
+            <option value="true">Actif</option>
+            <option value="false">Inactif</option>
+        </select>
+    </div>
 
-                        </div>
+    <!-- SUBMIT -->
+    <button class="btn btn-primary">
+        Enregistrer
+    </button>
 
-                        <!-- BUTTONS -->
-                        <div class="d-flex justify-content-between mt-4">
-
-                            <a href="/medecins" class="btn btn-outline-secondary px-4">
-                                Retour
-                            </a>
-
-                            <button type="submit" class="btn btn-success px-4">
-                                Sauvegarder
-                            </button>
-
-                        </div>
-
-                    </form>
+</form>
 
                 </div>
             </div>

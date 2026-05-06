@@ -16,6 +16,10 @@ public class MedecinService {
         this.medecinRepository = medecinRepository;
     }
 
+    public Medecin save(Medecin medecin) {
+    return medecinRepository.save(medecin);
+}
+
     // CREATE / UPDATE
     public Medecin saveMedecin(Medecin medecin) {
 

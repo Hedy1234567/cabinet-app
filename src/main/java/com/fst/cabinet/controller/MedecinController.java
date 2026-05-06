@@ -36,7 +36,7 @@ public class MedecinController {
         this.patientService = patientService;
         this.rendezVousService = rendezVousService;
     }
-
+    
 
 
 
@@ -68,6 +68,12 @@ public class MedecinController {
         model.addAttribute("activePage", "medecins");
         return "medecins/add";
     }
+
+    @PostMapping("/medecins/add")
+public String saveMedecin(@ModelAttribute Medecin medecin) {
+    medecinService.save(medecin);
+    return "redirect:/medecins";
+}
 
     // SAVE (CREATE + UPDATE)
     @PostMapping("/medecins/save")

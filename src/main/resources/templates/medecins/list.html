@@ -133,6 +133,8 @@ body {
 <div class="content">
 <div class="container">
 
+
+
     <!-- TITLE -->
     <div class="mb-4">
         <h1 class="page-title">Liste des médecins</h1>
@@ -147,6 +149,24 @@ body {
        sec:authorize="hasAnyRole('ADMIN','SECRETAIRE')">
 
         ⬅ Retour au tableau de bord
+    </a>
+
+</div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+    <!-- RETURN BUTTON -->
+    <a th:href="@{/dashboard}"
+       class="btn btn-secondary"
+       sec:authorize="hasAnyRole('ADMIN','SECRETAIRE')">
+        ⬅ Retour
+    </a>
+
+    <!-- ADD MEDECIN BUTTON -->
+    <a th:href="@{/medecins/add}"
+       class="btn btn-primary"
+       sec:authorize="hasAnyRole('ADMIN','SECRETAIRE')">
+        ➕ Ajouter médecin
     </a>
 
 </div>
